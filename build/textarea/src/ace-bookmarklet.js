@@ -418,7 +418,7 @@ exports.transformTextarea = function(element, loader) {
         color: "white",
         fontSize: "10px",
         border: "1px solid #ccc",
-        "border-bottom-color": "#ddd"
+        "border-bottom-color": "#aaa"
     };
     if (!UA.isOldIE) {
         settingDivStyles.backgroundColor = "#e8e8e8";
