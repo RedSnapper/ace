@@ -390,7 +390,7 @@ exports.transformTextarea = function(element, loader) {
         left: "0px",
         right: "0px",
         bottom: "0px",
-        border: "1px solid #ccc"
+        border: "1px solid #ddd"
     });
     container.appendChild(editorDiv);
 
@@ -417,8 +417,8 @@ exports.transformTextarea = function(element, loader) {
         zIndex: 100,
         color: "white",
         fontSize: "10px",
-        border: "1px solid #ccc",
-        "border-bottom-color": "#aaa"
+        border: "1px solid #ddd",
+        "border-bottom-color": "#ccc"
     };
     if (!UA.isOldIE) {
         settingDivStyles.backgroundColor = "#e8e8e8";
@@ -640,7 +640,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     };
 
     var table = [];
-    table.push("<ul class='aceSettings'>");
+    table.push("<ul class='aceSettings'><li class='aceLabel'>Settings:</li"");
 
     function renderOption(builder, option, obj, cValue) {
         builder.push("<select title='" + option + "'>");
