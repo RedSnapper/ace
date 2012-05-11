@@ -416,13 +416,12 @@ exports.transformTextarea = function(element, loader) {
         position: "absolute",
         zIndex: 100,
         color: "white",
-        overflow: "auto",
-        fontSize: "14px"
+        fontSize: "10px"
     };
     if (!UA.isOldIE) {
-        settingDivStyles.backgroundColor = "rgba(0, 0, 0, 0.6)";
+        settingDivStyles.backgroundColor = "#e8e8e8";
     } else {
-        settingDivStyles.backgroundColor = "#333";
+        settingDivStyles.backgroundColor = "#e8e8e8";
     }
 
     applyStyles(settingDiv, settingDivStyles);
@@ -438,7 +437,7 @@ exports.transformTextarea = function(element, loader) {
     editor.focus();
 
     // Add the settingPanel opener to the editor's div.
-    editorDiv.appendChild(settingOpener);
+    //editorDiv.appendChild(settingOpener);
 
     // Create the API.
     var api = setupApi(editor, editorDiv, settingDiv, ace, options, loader);
