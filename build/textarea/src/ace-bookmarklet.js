@@ -640,7 +640,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     };
 
     var table = [];
-    table.push("<ul class='aceSettings'><li class='aceLabel'>Settings:</li"");
+    table.push("<ul class='aceSettings'><li class='aceLabel'>Settings:</li>");
 
     function renderOption(builder, option, obj, cValue) {
         builder.push("<select title='" + option + "'>");
