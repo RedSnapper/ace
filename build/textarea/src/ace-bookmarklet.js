@@ -629,14 +629,12 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             "16px": "16px"
         },
         softWrap: {
-            off:    "Off",
-            40:     "40",
-            80:     "80",
-            free:   "Free"
+            off:    "No Wrap",
+            free:   "Soft Wrap"
         },
         showPrintMargin:    BOOL,
-        useSoftTabs:        BOOL,
-        showInvisibles:     BOOL
+        useSoftTabs:        {true: "Spaces", false: "Tabs"},
+        showInvisibles:     {true: "Invisibles", false: "No Invisibles"},
     };
 
     var table = [];
