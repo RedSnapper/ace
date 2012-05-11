@@ -430,7 +430,7 @@ exports.transformTextarea = function(element, loader) {
     container.appendChild(settingDiv);
 
     // Power up ace on the textarea:
-    var options = this.options || {};
+    var options = this.options || exports.options;
 
     var editor = ace.edit(editorDiv);
     session = editor.getSession();
@@ -554,8 +554,8 @@ function setupApi(editor, editorDiv, settingDiv, ace, options, loader) {
         }
     };
 
-    for (var option in exports.options) {
-        ret.setOption(option, exports.options[option]);
+    for (var option in options) {
+        ret.setOption(option, options[option]);
     }
 
     return ret;
