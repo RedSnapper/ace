@@ -620,7 +620,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             twilight:         "Twilight",
             vibrant_ink:      "Vibrant Ink"
         },
-        gutter: BOOL,
+        gutter: {true: "#'s", false: "No #'s"},
         fontSize: {
             "10px": "10px",
             "11px": "11px",
@@ -632,7 +632,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             off:    "No Wrap",
             free:   "Soft Wrap"
         },
-        showPrintMargin:    BOOL,
+       /* showPrintMargin:    BOOL,*/
         useSoftTabs:        {true: "Spaces", false: "Tabs"},
         showInvisibles:     {true: "Invisibles", false: "No Invisibles"},
     };
