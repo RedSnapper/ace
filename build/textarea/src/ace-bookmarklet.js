@@ -332,7 +332,7 @@ function setupContainer(element, getValue) {
         var width = getCSSProperty(element, container, 'width') || (element.clientWidth + "px");
         var height = getCSSProperty(element, container, 'height')  || (element.clientHeight + "px");
         console.log(height);
-        style += 'height:' + parseInt(parseInt(height)+200) + 'px ;width:' + width + ';';
+        style += 'height:' + parseInt(parseInt(height)+80) + 'px ;width:' + width + ';';
 
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
@@ -389,7 +389,7 @@ exports.transformTextarea = function(element, loader) {
         top: "0px",
         left: "0px",
         right: "0px",
-        bottom: "0px",
+        bottom: "80px",
         border: "1px solid gray"
     });
     container.appendChild(editorDiv);
