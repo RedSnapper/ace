@@ -679,13 +679,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
         selects[i].onchange = onChange;
     }
 
-    var button = document.createElement("input");
-    button.type = "button";
-    button.value = "Hide";
-    button.onclick = function() {
-        api.setDisplaySettings(false);
-    };
-    settingDiv.appendChild(button);
+
 
     settingOpener.onclick = function() {
         api.setDisplaySettings(true);
