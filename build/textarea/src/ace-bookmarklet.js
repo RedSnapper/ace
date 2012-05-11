@@ -332,7 +332,7 @@ function setupContainer(element, getValue) {
         var width = getCSSProperty(element, container, 'width') || (element.clientWidth + "px");
         var height = getCSSProperty(element, container, 'height')  || (element.clientHeight + "px");
        
-        style += 'height:' + parseInt(parseInt(height)+80) + 'px ;width:' + width + ';';
+        style += 'height:' + parseInt(parseInt(height)+30) + 'px ;width:' + width + ';';
 
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
@@ -386,10 +386,10 @@ exports.transformTextarea = function(element, loader) {
     //
     var editorDiv = document.createElement("div");
     applyStyles(editorDiv, {
-        top: "0px",
+        top: "30px",
         left: "0px",
         right: "0px",
-        bottom: "80px",
+        bottom: "0px",
         border: "1px solid gray"
     });
     container.appendChild(editorDiv);
@@ -409,14 +409,16 @@ exports.transformTextarea = function(element, loader) {
 
     var settingDiv = document.createElement("div");
     var settingDivStyles = {
-        height: "80px",
+        height: "30px",
         left: "0px",
         right: "0px",
-        bottom: "0px",
+        top: "0px",
         position: "absolute",
         zIndex: 100,
         color: "white",
-        fontSize: "10px"
+        fontSize: "10px",
+        border: "solid 1px #666",
+        "border-bottom":"none" 
     };
     if (!UA.isOldIE) {
         settingDivStyles.backgroundColor = "#e8e8e8";
