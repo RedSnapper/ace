@@ -390,7 +390,7 @@ exports.transformTextarea = function(element, loader) {
         left: "0px",
         right: "0px",
         bottom: "0px",
-        border: "1px solid gray"
+        border: "1px solid red"
     });
     container.appendChild(editorDiv);
 
@@ -417,8 +417,7 @@ exports.transformTextarea = function(element, loader) {
         zIndex: 100,
         color: "white",
         fontSize: "10px",
-        border: "solid 1px #666",
-        "border-bottom":"none" 
+        border: "solid 1px #aaa"
     };
     if (!UA.isOldIE) {
         settingDivStyles.backgroundColor = "#e8e8e8";
