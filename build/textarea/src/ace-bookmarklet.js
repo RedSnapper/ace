@@ -430,7 +430,7 @@ exports.transformTextarea = function(element, loader) {
     container.appendChild(settingDiv);
 
     // Power up ace on the textarea:
-    var options = {};
+    var options = this.options || {};
 
     var editor = ace.edit(editorDiv);
     session = editor.getSession();
