@@ -641,7 +641,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     };
 
     var table = [];
-    table.push("<table><tr><th>Setting</th><th>Value</th></tr>");
+    table.push("<ul class='aceSettings'>");
 
     function renderOption(builder, option, obj, cValue) {
         builder.push("<select title='" + option + "'>");
@@ -660,12 +660,11 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     }
 
     for (var option in options) {
-        table.push("<tr><td>", desc[option], "</td>");
-        table.push("<td>");
+        table.push("<li>");
         renderOption(table, option, optionValues[option], options[option]);
-        table.push("</td></tr>");
+        table.push("</li>");
     }
-    table.push("</table>");
+    table.push("</ul>");
     settingDiv.innerHTML = table.join("");
 
     var selects = settingDiv.getElementsByTagName("select");
