@@ -657,7 +657,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     }
 
     for (var option in options) {
-        if( options[option]!=="showPrintMargin") {
+        if( option!=="showPrintMargin") {
             table.push("<li>");
             renderOption(table, option, optionValues[option], options[option]);
             table.push("</li>");
