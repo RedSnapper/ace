@@ -641,7 +641,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     };
 
     var table = [];
-    table.push("<ul class='aceSettings'>");
+    table.push("<ul class='aceSettings'><li><a href='#' class='aceLargerBt'>[+]</a></li>");
 
     function renderOption(builder, option, obj, cValue) {
         builder.push("<select title='" + option + "'>");
