@@ -390,7 +390,7 @@ exports.transformTextarea = function(element, loader) {
         left: "0px",
         right: "0px",
         bottom: "0px",
-        border: "1px solid red"
+        border: "1px solid #ddd"
     });
     container.appendChild(editorDiv);
 
@@ -409,7 +409,7 @@ exports.transformTextarea = function(element, loader) {
 
     var settingDiv = document.createElement("div");
     var settingDivStyles = {
-        height: "30px",
+        height: "29px",
         left: "0px",
         right: "0px",
         top: "0px",
@@ -417,7 +417,7 @@ exports.transformTextarea = function(element, loader) {
         zIndex: 100,
         color: "white",
         fontSize: "10px",
-        border: "solid 1px #aaa"
+        border: "solid 1px #ddd"
     };
     if (!UA.isOldIE) {
         settingDivStyles.backgroundColor = "#e8e8e8";
