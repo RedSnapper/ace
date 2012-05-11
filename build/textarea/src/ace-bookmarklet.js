@@ -471,8 +471,6 @@ function setupApi(editor, editorDiv, settingDiv, ace, options, loader) {
         },
 
         setOption: function(key, value) {
-            if (options[key] == value) return;
-
             switch (key) {
                 case "gutter":
                     renderer.setShowGutter(toBool(value));
