@@ -632,7 +632,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             off:    "No Wrap",
             free:   "Soft Wrap"
         },
-       /* showPrintMargin:    BOOL,*/
+       showPrintMargin:    BOOL,
         useSoftTabs:        {true: "Spaces", false: "Tabs"},
         showInvisibles:     {true: "Invisibles", false: "No Invisibles"},
     };
@@ -657,9 +657,11 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     }
 
     for (var option in options) {
-        table.push("<li>");
-        renderOption(table, option, optionValues[option], options[option]);
-        table.push("</li>");
+        (if options[option]!=="showPrintMargin") {
+            table.push("<li>");
+            renderOption(table, option, optionValues[option], options[option]);
+            table.push("</li>");
+        }
     }
     table.push("</ul>");
     settingDiv.innerHTML = table.join("");
