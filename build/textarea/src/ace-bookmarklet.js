@@ -337,6 +337,7 @@ function setupContainer(element, getValue) {
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
         container.setAttribute('style', style);
+        container.setAttribute('className', 'aceContainer');
     };
     Event.addListener(window, 'resize', resizeEvent);
 
