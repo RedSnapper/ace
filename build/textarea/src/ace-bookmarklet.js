@@ -409,15 +409,13 @@ exports.transformTextarea = function(element, loader) {
 
     var settingDiv = document.createElement("div");
     var settingDivStyles = {
-        top: "0px",
+        height: "80px"
         left: "0px",
         right: "0px",
         bottom: "0px",
         position: "absolute",
-        padding: "5px",
         zIndex: 100,
         color: "white",
-        display: "none",
         overflow: "auto",
         fontSize: "14px"
     };
