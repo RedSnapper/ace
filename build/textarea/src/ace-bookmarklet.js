@@ -332,7 +332,7 @@ function setupContainer(element, getValue) {
         var width = getCSSProperty(element, container, 'width') || (element.clientWidth + "px");
         var height = getCSSProperty(element, container, 'height')  || (element.clientHeight + "px");
        
-        style += 'height:' + parseInt(parseInt(height)+30) + 'px ;width:' + width + ';';
+        style += 'height:' + parseInt(parseInt(height)*2+30) + 'px ;width:' + width + ';';
 
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
@@ -641,7 +641,8 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     };
 
     var table = [];
-    table.push("<ul class='aceSettings'><li><a href='#' class='aceLargerBt'>[+]</a></li>");
+   // table.push("<ul class='aceSettings'><li><a href='#' class='aceLargerBt'>[+]</a></li>");
+    table.push("<ul class='aceSettings'>");
 
     function renderOption(builder, option, obj, cValue) {
         builder.push("<select title='" + option + "'>");
