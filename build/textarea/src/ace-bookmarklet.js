@@ -412,7 +412,6 @@ exports.transformTextarea = function(element, loader) {
     var settingDivStyles = {
         height: "29px",
         left: "0px",
-        right: "0px",
         top: "0px",
         position: "absolute",
         zIndex: 100,
