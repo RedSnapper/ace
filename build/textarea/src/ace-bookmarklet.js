@@ -331,7 +331,7 @@ function setupContainer(element, getValue) {
         // to the left and right.
         var width = getCSSProperty(element, container, 'width') || (element.clientWidth + "px");
         var height = getCSSProperty(element, container, 'height')  || (element.clientHeight + "px");
-       	window.console(width);
+       	window.console.log(width);
         style += 'height:' + parseInt(parseInt(height)*2+30) + 'px ;width:' + width + ';';
 
         // Set the display property to 'inline-block'.
