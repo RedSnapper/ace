@@ -625,7 +625,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             twilight:         "Twilight",
             vibrant_ink:      "Vibrant Ink"
         },
-        gutter: {true: "#'s", false: "No #'s"},
+        gutter: {"true": "#'s", "false": "No #'s"},
         fontSize: {
             "10px": "10px",
             "11px": "11px",
