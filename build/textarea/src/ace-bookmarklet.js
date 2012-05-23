@@ -705,6 +705,7 @@ exports.options = {
 };
 
 });
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
@@ -20472,4 +20473,17 @@ dom.importCssString(exports.cssText, exports.cssClass);
                         __ace_shadowed__[key] = a[key];
                 });
             })();
-        
+ //Support for full screen 
+ 
+var dom = require("ace/lib/dom")
+var commands = require("ace/commands/default_commands").commands
+
+commands.push({
+	name: "Toggle Fullscreen",
+	bindKey: "F11",
+	exec: function(editor) {
+		dom.toggleCssClass(document.body, "fullScreen")
+		dom.toggleCssClass(editor.container, "fullScreen-editor")
+		editor.resize()
+	}
+})       
