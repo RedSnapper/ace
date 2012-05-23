@@ -639,7 +639,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
         },
        showPrintMargin:    BOOL,
         useSoftTabs:        {"true": "Spaces", "false": "Tabs"},
-        showInvisibles:     {"true": "Invisibles", "false": "No Invisibles"},
+        showInvisibles:     {"true": "Invisibles", "false": "No Invisibles"}
     };
 
     var table = [];
