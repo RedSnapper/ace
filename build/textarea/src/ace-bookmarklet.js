@@ -6617,10 +6617,21 @@ function bindKey(win, mac) {
     };
 }
 
+var elems = document.getElementsByTagName('span');
+var fullscreen= "F6";
+for (var i = 0; i < elems.length; i++) {
+	if((elems[i].className).indexOf("textAreaFSKey") > -1)
+    {
+      fullscreen = elems[i].innerHTML
+      break;
+    }
+}
+
+
 
 exports.commands = [{
     name: "Toggle Fullscreen",
-    bindKey: bindKey("F11", "F6"),
+    bindKey: bindKey(fullscreen,fullscreen),
     exec: function(editor) { 	
 		dom.toggleCssClass(document.body, "fullScreen");
 		dom.toggleCssClass(editor.container, "fullScreen-editor");
