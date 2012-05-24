@@ -631,7 +631,11 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             "11px": "11px",
             "12px": "12px",
             "14px": "14px",
-            "16px": "16px"
+            "16px": "16px",
+            "18px": "18px",
+            "20px": "20px",
+            "24px": "24px",
+            "30px": "30px"
         },
         softWrap: {
             off:    "No Wrap",
