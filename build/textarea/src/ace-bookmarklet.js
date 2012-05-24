@@ -334,7 +334,7 @@ function setupContainer(element, getValue) {
        	if(parseInt(width)<600){
 			width = "650px";
 		}
-        style += 'height:' + parseInt(parseInt(height)*2+30) + 'px ;width:' + width + ';';
+        style += 'height:' + parseInt(parseInt(height)+30) + 'px ;width:' + width + ';';
 
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
@@ -6626,6 +6626,7 @@ exports.commands = [{
     bindKey: bindKey("F11", "F6"),
     exec: function(editor) { 	
 		dom.toggleCssClass(document.body, "fullScreen")
+		dom.toggleCssClass(editor.container, "fullScreen-editor")
 		dom.toggleCssClass(editor.container, "fullScreen-editor")
 		editor.resize(); },
     readOnly: true
