@@ -1107,6 +1107,13 @@ var Keys = (function() {
             121: "F10",
             122: "F11",
             123: "F12",
+			124: "F13",
+			125: "F14",
+			126: "F15",
+			127: "F16",
+			128: "F17",
+			129: "F18",
+			130: "F19",
             144: "Numlock",
             145: "Scrolllock"
         },
@@ -6618,7 +6625,7 @@ function bindKey(win, mac) {
 }
 
 var elems = document.getElementsByTagName('span');
-var fullscreen= "F14";
+var fullscreen= "F6";
 for (var i = 0; i < elems.length; i++) {
 	if((elems[i].className).indexOf("textAreaFSKey") > -1)
     {
