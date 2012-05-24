@@ -6605,8 +6605,8 @@ __ace_shadowed__.define('ace/commands/default_commands', ['require', 'exports', 
 "use strict";
 
 var lang = require("../lib/lang");
-var dom = require("ace/lib/dom")
 
+var dom = require("ace/lib/dom")
 
 function bindKey(win, mac) {
     return {
@@ -6615,18 +6615,16 @@ function bindKey(win, mac) {
     };
 }
 
-exports.commands.push({
-	name: "Toggle Fullscreen",
-	bindKey: bindKey("F11", "F6"),
-	exec: function(editor) {
-		dom.toggleCssClass(document.body, "fullScreen")
-		dom.toggleCssClass(editor.container, "fullScreen-editor")
-		editor.resize()
-	}
-})
-
 
 exports.commands = [{
+    name: "Toggle Fullscreen",
+    bindKey: bindKey("F11", "F6"),
+    exec: function(editor) { 	
+		dom.toggleCssClass(document.body, "fullScreen")
+		dom.toggleCssClass(editor.container, "fullScreen-editor")
+		editor.resize(); },
+    readOnly: true
+},{
     name: "selectall",
     bindKey: bindKey("Ctrl-A", "Command-A"),
     exec: function(editor) { editor.selectAll(); },
