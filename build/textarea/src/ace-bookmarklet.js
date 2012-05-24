@@ -6625,9 +6625,8 @@ exports.commands = [{
     name: "Toggle Fullscreen",
     bindKey: bindKey("F11", "F6"),
     exec: function(editor) { 	
-		dom.toggleCssClass(document.body, "fullScreen")
-		dom.toggleCssClass(editor.container, "fullScreen-editor")
-		dom.toggleCssClass(editor.container, "fullScreen-editor")
+		dom.toggleCssClass(document.body, "fullScreen");
+		dom.toggleCssClass(editor.container, "fullScreen-editor");
 		editor.resize(); },
     readOnly: true
 },{
