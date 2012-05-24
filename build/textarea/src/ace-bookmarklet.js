@@ -6618,7 +6618,7 @@ function bindKey(win, mac) {
 }
 
 var elems = document.getElementsByTagName('span');
-var fullscreen= "F6";
+var fullscreen= "F14";
 for (var i = 0; i < elems.length; i++) {
 	if((elems[i].className).indexOf("textAreaFSKey") > -1)
     {
