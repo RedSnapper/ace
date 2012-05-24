@@ -675,6 +675,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
     }
     table.push("</ul>");
     settingDiv.innerHTML = table.join("");
+	settingDiv.setAttribute("class", "aceSettingCont");
 
     var selects = settingDiv.getElementsByTagName("select");
     for (var i = 0; i < selects.length; i++) {
