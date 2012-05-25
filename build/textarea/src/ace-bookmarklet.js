@@ -582,7 +582,8 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             javascript: "Javacript",
             xml:        "XML",
             html:       "HTML",
-            css:        "CSS"/*,
+            css:        "CSS",
+			macro: 		"Macro"/*,
             scss:       "SCSS",
             python:     "Python",
             php:        "PHP",
@@ -9455,7 +9456,7 @@ var global = (function() {
 
 var options = {
     packaged: false,
-    workerPath: "",
+    workerPath: "mortar/Javascript/AceEditor",
     modePath: "",
     themePath: "",
     suffix: ".js"
