@@ -9456,7 +9456,7 @@ var global = (function() {
 
 var options = {
     packaged: false,
-    workerPath: "mortar/Javascript/AceEditor",
+    workerPath: "Javascript/AceEditor",
     modePath: "",
     themePath: "",
     suffix: ".js"
