@@ -37,7 +37,7 @@ var BuilderHighlightRules = function() {
 				regex: "{(?!\|)"
 			},{
 				token : function (x) { nest.unshift("function"); return "constant"; },
-				regex: "@\w+\("
+				regex: "eek@\w+\("
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0 && nest[0]==="function") rv="constant"; return rv;},
 				regex: ","
