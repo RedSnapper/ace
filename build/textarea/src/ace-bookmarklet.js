@@ -447,7 +447,7 @@ exports.transformTextarea = function(element, loader) {
     // Create the setting's panel.
     setupSettingPanel(settingDiv, settingOpener, api, options);
 
-    return editor;
+    return api;
 };
 
 function load(url, module, callback) {
@@ -583,7 +583,7 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
             xml:        "XML",
             html:       "HTML",
             css:        "CSS",
-			macro: 		"Macro"/*,
+			builder: 	"Builder"/*,
             scss:       "SCSS",
             python:     "Python",
             php:        "PHP",
@@ -9456,7 +9456,7 @@ var global = (function() {
 
 var options = {
     packaged: false,
-    workerPath: "Javascript/AceEditor",
+    workerPath: "",
     modePath: "",
     themePath: "",
     suffix: ".js"
