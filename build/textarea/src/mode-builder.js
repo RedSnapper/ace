@@ -34,25 +34,25 @@ var BuilderHighlightRules = function() {
 		"start": [ //start is always 'variable'.
 			{
 				token : function (x) { nest.unshift("language"); return "language"; },
-				regex: "{(?!\|)"
+				regex: "{(?!\\|)"
 			},{
 				token : function (x) { nest.unshift("function"); return "constant"; },
-				regex: "\@\w+\("
+				regex: "\\@\w+\\("
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0 && nest[0]==="function") rv="constant"; return rv;},
 				regex: ","
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0) { rv=nest[0];} return rv;},
-				regex: "\(|\|"
+				regex: "\\(|\\|"
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0 && nest[0]==="function") {rv="constant"; nest.shift();} return rv;},
-				regex: "\)"
+				regex: "\\)"
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0) {rv=nest.shift();} return rv;},
-				regex: "\}"
+				regex: "\\}"
 			},{
 				token : ["language", "comment", "language"],
-				regex: "({\|)((?:[^|]|\|(?!}))*)(\|})"
+				regex: "({\\|)((?:[^|]|\\|(?!}))*)(\\|})"
 			},{
 				token : function (x) { var rv="variable"; if (nest.length!=0) { rv=nest[0];} return rv;},
 				regex: "[^{|}@(,)]+"
