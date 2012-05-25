@@ -29,7 +29,7 @@ var lang = require("../lib/lang");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var BuilderHighlightRules = function() {
-	var nest [];
+	var nest =[];
 	this.$rules = {
 		"start": [ //start is always 'variable'.
 			{
