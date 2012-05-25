@@ -447,7 +447,7 @@ exports.transformTextarea = function(element, loader) {
     // Create the setting's panel.
     setupSettingPanel(settingDiv, settingOpener, api, options);
 
-    return api;
+    return editor;
 };
 
 function load(url, module, callback) {
