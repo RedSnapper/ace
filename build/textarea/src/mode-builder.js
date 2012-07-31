@@ -75,14 +75,26 @@ var BuilderHighlightRules = function() {
 				regex: "[^{|}@(,)]+"
 			},{
 			//Literals are self contained.
-				token : ["comment", "comment.doc", "comment"],
-				regex: "({\\|)((?:[^|]|\\|(?!}))*)(\\|})"
-			},{
+				token : "comment",
+				regex : "{\\|",
+                next  : "comment"
+ 			},{
 			//'@' At-signs that are not literals or macros are invalid.
 				token : "invalid",
 				regex: "@"
 			}
-		]
+      ],
+    "comment" : [
+            {
+                token : "comment", // closing comment
+                regex : "\\|}",
+                next : "start"
+            },{
+                token : "comment", // comment spanning whole line
+                merge : true,
+                regex : "(?:[^|]|\\|(?!}))+"
+            }
+        ]
 	};
 };
 
