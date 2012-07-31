@@ -6097,19 +6097,20 @@ EventEmitter._dispatchEvent = function(eventName, e) {
         return;
 
     e = e || {};
-    e.type = eventName;
+    // if (!e.type)
+    //     e.type = eventName;
     
-    if (!e.stopPropagation) {
-        e.stopPropagation = function() {
-            this.propagationStopped = true;
-        };
-    }
+    // if (!e.stopPropagation) {
+    //     e.stopPropagation = function() {
+    //         this.propagationStopped = true;
+    //     };
+    // }
     
-    if (!e.preventDefault) {
-        e.preventDefault = function() {
-            this.defaultPrevented = true;
-        };
-    }
+    // if (!e.preventDefault) {
+    //     e.preventDefault = function() {
+    //         this.defaultPrevented = true;
+    //     };
+    // }
 
     for (var i=0; i<listeners.length; i++) {
         listeners[i](e);
@@ -6136,7 +6137,7 @@ EventEmitter.addEventListener = function(eventName, callback) {
 
     var listeners = this._eventRegistry[eventName];
     if (!listeners)
-        var listeners = this._eventRegistry[eventName] = [];
+        listeners = this._eventRegistry[eventName] = [];
 
     if (listeners.indexOf(callback) == -1)
         listeners.push(callback);
