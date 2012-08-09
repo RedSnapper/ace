@@ -303,6 +303,10 @@ function setupContainer(element, getValue) {
     // pixels although the dimension might be given as percentage. When the
     // window resizes, the dimensions defined by percentages changes, so the
     // properties have to get recomputed to get the new/true pixels.
+    
+    //Only add the extra height once for the options
+    var once=true;
+
     var resizeEvent = function() {
         var style = 'position:relative;';
         [
@@ -331,7 +335,12 @@ function setupContainer(element, getValue) {
         // to the left and right.
         var width = getCSSProperty(element, container, 'width') || (element.clientWidth + "px");
         var height = getCSSProperty(element, container, 'height')  || (element.clientHeight + "px");
-        style += 'height:' + parseInt(parseInt(height)+30) + 'px ;width:' + width + ';';
+        
+        //Only add the extra height once for the options
+        if(once){height = parseInt(parseInt(height)+30);}
+        var once=false;
+        style += 'height:' + parseInt(height) + 'px ;width:' + width + ';';
+
 
         // Set the display property to 'inline-block'.
         style += 'display:inline-block;';
