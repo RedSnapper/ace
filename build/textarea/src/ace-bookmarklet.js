@@ -406,15 +406,16 @@ exports.transformTextarea = function(element, loader) {
     var settingOpener = document.createElement("div");
     applyStyles(settingOpener, {
         position: "absolute",
-        width: "15px",
         right: "0px",
         bottom: "0px",
         background: "red",
-        cursor: "pointer",
-        textAlign: "center",
-        fontSize: "12px"
+        cursor: "nw-resize",
+        borderStyle: "solid",
+        borderWidth: "9px 8px 10px 9px",
+        width: "2px",
+        borderColor: "lightblue gray gray lightblue",
+        zIndex: 101
     });
-    settingOpener.innerHTML = "I";
 
     var settingDiv = document.createElement("div");
     var settingDivStyles = {
@@ -448,13 +449,13 @@ exports.transformTextarea = function(element, loader) {
     editor.focus();
 
     // Add the settingPanel opener to the editor's div.
-    //editorDiv.appendChild(settingOpener);
+    editorDiv.appendChild(settingOpener);
 
     // Create the API.
     var api = setupApi(editor, editorDiv, settingDiv, ace, options, loader);
 
     // Create the setting's panel.
-    setupSettingPanel(settingDiv, settingOpener, api, options);
+    setupSettingPanel(settingDiv, settingOpener, api, options,editor,container);
 
     return editor;
 };
@@ -568,7 +569,7 @@ function setupApi(editor, editorDiv, settingDiv, ace, options, loader) {
     return ret;
 }
 
-function setupSettingPanel(settingDiv, settingOpener, api, options) {
+function setupSettingPanel(settingDiv, settingOpener, api, options,editor,container) {
     var BOOL = {
         "true":  true,
         "false": false
@@ -697,11 +698,22 @@ function setupSettingPanel(settingDiv, settingOpener, api, options) {
         selects[i].onchange = onChange;
     }
 
-
-
-    settingOpener.onclick = function() {
-        api.setDisplaySettings(true);
-    };
+    Event.addListener(settingOpener, "mousemove", function(e) {
+        this.style.cursor = "nw-resize";
+    });
+    
+    Event.addListener(settingOpener, "mousedown", function(e) {
+        
+        container.style.zIndex = 100000;
+        var rect = container.getBoundingClientRect();
+        var startX = rect.width  + rect.left - e.clientX;
+        var startY = rect.height  + rect.top - e.clientY;
+        Event.capture(settingOpener, function(e) {
+            container.style.width = e.clientX - rect.left + startX + "px";
+            container.style.height = e.clientY - rect.top + startY + "px";
+            editor.resize();
+        }, function() {});
+    });
 }
 
 // Default startup options.
