@@ -22,7 +22,6 @@
 }
 
 .%cssClass% .ace_text-layer {
-  cursor: text;
   color: %foreground%;
 }
 
@@ -55,6 +54,10 @@
 
 .%cssClass% .ace_marker-layer .ace_active_line {
   background: %active_line%;
+}
+
+.%cssClass% .ace_gutter_active_line {
+  background-color: %active_line%;
 }
 
 .%cssClass% .ace_marker-layer .ace_selected_word {
