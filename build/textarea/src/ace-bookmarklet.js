@@ -372,7 +372,6 @@ exports.transformTextarea = function(element, loader) {
         bottom: "0px",
         height: "29px",
         position: "absolute",
-        padding: "5px",
         zIndex: 100,
         color: "white",
         fontSize: "10px",
@@ -11096,7 +11095,7 @@ __ace_shadowed__.define('ace/commands/default_commands', ['require', 'exports', 
 
 
 var lang = require("../lib/lang");
-var dom = require("ace/lib/dom");
+var dom = require("../lib/dom");
 
 function bindKey(win, mac) {
     return {
