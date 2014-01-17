@@ -13056,7 +13056,8 @@ var Text = function(parentEl) {
             style.overflow = "visible";
             style.whiteSpace = "nowrap";
 
-            measureNode.innerHTML = "X";
+            // fixes fractional fixed-width fonts; see http://git.io/CavZNw
+            measureNode.innerHTML = lang.stringRepeat("X", 100);
 
             var container = this.element.parentNode;
             while (container && !dom.hasCssClass(container, "ace_editor"))
@@ -13072,7 +13073,7 @@ var Text = function(parentEl) {
 
         var size = {
             height: rect.height,
-            width: rect.width
+            width: rect.width / 100
         };
 
         // Size and width can be null if the editor is not visible or
