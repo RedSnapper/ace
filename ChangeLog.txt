@@ -1,4 +1,4 @@
-2011.08.02, Version 0.2.0
+2011.08.02, Version 0.2.0.
 
 * Split view (Julian Viereck)
   - split editor area horizontally or vertivally to show two files at the same
