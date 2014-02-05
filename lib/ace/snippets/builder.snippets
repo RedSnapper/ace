@@ -1,0 +1,38 @@
+snippet .
+	@wDiv(@wa(class,${1}),
+		${2}
+	)
+snippet div
+	@wDiv(${1},
+		${2}
+	)
+snippet div.
+	@wDiv(@wa(class,${1}),
+		${2}
+	)
+snippet ifs
+	@iForSibs(${1},${2:\$NODE\$},${3:\$NUM\$},
+		${4}
+	)
+snippet section.
+	@wSection(@wa(class,${1}),
+		${2}
+	)
+
+snippet if
+	@iEq(${1},${2},${3:true},${4:false})
+snippet set
+	@iSet(~${1})
+snippet get
+	@iGet(~${1})
+
+snippet li
+	@wLi(,
+		${1}
+	)
+
+snippet ul+
+	@wUl(,
+		@wLi(,${1})
+		${2}
+	)

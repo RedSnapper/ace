@@ -124,11 +124,17 @@ function bookmarklet() {
         dest:   targetDir + '/style.css'
     });
 
+    copy({
+        source: "build/src-min/worker-javascript.js",
+        dest:   targetDir + '/src/worker-javascript.js'
+    });
+
     buildAce({
         targetDir: targetDir + "/src",
         ns: "__ace_shadowed__",
         exportModule: "ace/ext/textarea",
-        compress: false,
+        requires: ["ace/ext/textarea", "ace/ext/language_tools","ace/ext/emmet"],
+        compress: true,
         noconflict: true,
         suffix: "",
         name: "ace-bookmarklet",
