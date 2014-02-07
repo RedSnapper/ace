@@ -1,3 +1,139 @@
+# Internal macros
+snippet append 
+	@iAppend(${1:~var},${0})
+snippet ap
+	@iAppend(${1:~var},${0})
+snippet birth
+	@iBirth(${1:NODEREF},${2:COMPARISON},${3:TRUE},${4:FALSE})
+snippet console
+	@iConsole(${1:e|i|t|n|w},${2:MESSAGE})
+snippet co
+	@iConsole(${1:e|i|t|n|w},${2:MESSAGE})
+snippet content
+	@iContent(${1:NODEREF},${2:SEGNAME},${3:[METADATA]})
+snippet date
+	@iDate(${1:DATE},${2:FORMAT},${3:COMPARATOR},${4:[TRUE]},${5:[FALSE]})
+snippet death
+	@iDeath(${1:NODEREF},${2:COMPARISON},${3:TRUE},${4:FALSE})
+snippet decode
+	@iDecode(${0:CONTENT})
+snippet digest
+	@iDigest(${1:CONTENT},${2:md4|md5|mdc3|sha1|sha256|sha384|sha512|dss1|ripemd160})
+snippet embed
+	@iEmbed(${1:REF},${2:[META]})
+snippet eq
+	@iEq(${1:A},${2:B},${3:TRUE},${4:FALSE})
+snippet eqfamily
+	@iEqFamily(${1:TEST-NODE},${2:FAMILY-NODE},${3:TRUE},${4:FALSE})
+snippet eqf
+	@iEqFamily(${1:TEST-NODE},${2:FAMILY-NODE},${3:TRUE},${4:FALSE})
+snippet eqnode
+	@iEqNode(${1:NODE-A},${2:NODE-B},${3:TRUE},${4:FALSE})
+snippet eqn
+	@iEqNode(${1:NODE-A},${2:NODE-B},${3:TRUE},${4:FALSE})
+snippet eqsibs
+	@iEqSibs(${1:NODE-A},${2:NODE-B},${3:TRUE},${4:FALSE})
+snippet eval
+	@iEval(${1:CONTENT},${2:CONTENT})
+snippet existcontent
+	@iExistContent(${1:NODE},${2:SEGMENT},${3:TRUE},${4:FALSE})
+snippet exc
+	@iExistContent(${1:NODE},${2:SEGMENT},${3:TRUE},${4:FALSE})
+snippet existmedia
+	@iExistMedia(${1:REF},${2:TRUE},${3:FALSE})
+snippet exm
+	@iExistMedia(${1:REF},${2:TRUE},${3:FALSE})
+snippet exnode
+	@iExistNode(${1:REF},${2:TRUE},${3:FALSE})
+snippet exn
+	@iExistNode(${1:REF},${2:TRUE},${3:FALSE})
+snippet existsimilar
+	@iExistSimilar(${1:REF},${2:TRUE},${3:FALSE})
+snippet exists
+	@iExists(${1:VAR},${2:TRUE},${3:FALSE})
+snippet ex
+	@iExists(${1:VAR},${2:TRUE},${3:FALSE})
+snippet forancestry
+	@iForAncestry(${1:STARTNODE},${2:DIRECTION(F|R)},${3:TERMINATION-POINT},${4:PATTERN},
+		${5}
+	)
+snippet fora
+	@iForAncestry(${1:STARTNODE},${2:DIRECTION(F|R)},${3:TERMINATION-POINT},${4:PATTERN},
+		${5}
+	)
+snippet fornodes
+	@iForNodes(${1:LIST},${2:\$NODE\$},${3:\$NODE\$},${4:SORT},
+		${5}
+	)
+snippet forn
+	@iForNodes(${1:LIST},${2:\$NODE\$},${3:\$NUM\$},${4:SORT},
+		${5}
+	)
+snippet forpeers
+	@iForPeers(${1:NODE},${2:TERMINATION-POINT},${3:\$NODE\$},${4:\$NUM\$},${5:SORT},
+		${6}
+	)
+snippet forp
+	@iForPeers(${1:NODE},${2:TERMINATION-POINT},${3:\$NODE\$},${4:\$NUM\$},${5:SORT},
+		${6}
+	)
+snippet forsibs
+	@iForSibs(${1:NODE},${2:\$NODE\$},${3:\$NUM\$},
+		${4}
+	)
+snippet fors
+	@iForSibs(${1:NODE},${2:\$NODE\$},${3:\$NUM\$},
+		${4}
+	)
+snippet forsimilar
+	@iForSimilar(${1:NODE},${2:\$NODE\$},${3:SCORE-PATTERN},${4:TAX-ROOT},${5:DIRECTION},
+		${6}
+	)
+snippet fortax
+	@iForTax(${1:NODE},${2:TAX-ROOT},${3:\$NODE\$},
+		${4}	
+	)
+snippet fortaxnodes
+	@iForTaxNodes(${1:TAX-NODE},${2:\$NODE\$},${3:\$NUM\$},${4:SORT},
+		${5}
+	)
+snippet get
+	@iGet(~${1:VAR})
+snippet hex
+	@iHex(${1:CONTENT},${2:[COMPARATOR,TRUE,FALSE]})
+snippet id
+	@iID(${1:NODE})
+snippet lang
+	@iLang(${1:[COMPARATOR,TRUE,FALSE]})
+snippet langid
+	@iLangID(${1:[COMPARATOR,TRUE,FALSE]})
+snippet layout
+	@iLayout(${1:NODE},${2:COMPARATOR},${3:TRUE},${4:FALSE})
+snippet la
+	@iLayout(${1:NODE},${2:COMPARATOR},${3:TRUE},${4:FALSE})
+snippet layoutname
+	@iLayoutName(${1:NODE},${2:[COMP,TRUE,FALSE]})
+snippet left
+	@iLeft(${1:INPUT},${2:OFFSET},${3:[COMPARATOR,TRUE,FALSE]})
+snippet length
+	@iLength(${1:INPUT},${2:[COMPARATOR,TRUE,FALSE]})
+snippet link
+	@iLink(${1:NODE[:OFFSET]})
+snippet linkref
+	@iLinkRef(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet lower
+	@iLower(${1:STRING},${2:[COMPARATOR,TURE,FALSE]})
+snippet math
+	@iMath(${1:-|*|x|m|L|G|=|f|c|Rf|R|Rx},${2:INPUT1},${3:INPUT2},${4:COMP},${5:TRUE},${6:FALSE})
+snippet media
+	@iMedia(${1:MEDIAREF},${2:[META]})
+
+
+
+snippet set
+	@iSet(~${1:VAR})
+
+#HTML
 snippet .
 	@wDiv(@wa(class,${1}),
 		${2}
@@ -10,21 +146,14 @@ snippet div.
 	@wDiv(@wa(class,${1}),
 		${2}
 	)
-snippet ifs
-	@iForSibs(${1},${2:\$NODE\$},${3:\$NUM\$},
-		${4}
-	)
 snippet section.
 	@wSection(@wa(class,${1}),
 		${2}
 	)
 
-snippet if
-	@iEq(${1},${2},${3:true},${4:false})
-snippet set
-	@iSet(~${1})
-snippet get
-	@iGet(~${1})
+
+
+
 
 snippet li
 	@wLi(,
