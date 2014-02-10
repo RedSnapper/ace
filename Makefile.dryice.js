@@ -125,7 +125,7 @@ function bookmarklet() {
     });
 
     copy({
-        source: "build/src-min/worker-javascript.js",
+        source: "build_support/worker-javascript.js",
         dest:   targetDir + '/src/worker-javascript.js'
     });
 

@@ -1,0 +1,1 @@
+ace.define("ace/snippets/builder",["require","exports","module"],function(e,t,n){t.snippetText="",t.scope="builder"})
