@@ -127,8 +127,20 @@ snippet math
 	@iMath(${1:-|*|x|m|L|G|=|f|c|Rf|R|Rx},${2:INPUT1},${3:INPUT2},${4:COMP},${5:TRUE},${6:FALSE})
 snippet media
 	@iMedia(${1:MEDIAREF},${2:[META]})
-
-
+snippet mid
+	@iMid(${1:STRING},${2:OFFSET},${3:SIZE},${4:[COMP,T,F]})
+snippet index
+	@iIndex(${1:DELIMITER},${2:LIST},${3:normalise|size|find|resize|get|set|ifempty|erase|push|append|pop|drop|reverse},${4:[PARM1,PARM2]})
+snippet null
+	@iNull(${1:CONTENT})
+snippet numchildren
+	@iNumChildren(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet numc
+	@iNumChildren(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet numgen
+	@iNumGen(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet numg
+	@iNumGen(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
 
 snippet set
 	@iSet(~${1:VAR})
