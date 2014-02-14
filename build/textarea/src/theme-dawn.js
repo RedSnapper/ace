@@ -106,7 +106,7 @@ exports.cssText = "\
 }\
 \
 .ace-dawn .ace_invisible {\
-  color: rgba(75, 75, 126, 0.50);\
+  color: rgba(75, 75, 126, 0.66);\
 }\
 \
 .ace-dawn .ace_keyword{\

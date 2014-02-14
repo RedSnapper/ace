@@ -48,7 +48,7 @@ var BuilderHighlightRules = function() {
 			//'{' Entering into a brace.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length !== 0 ) {
 						switch (nest[0]) {
 							case broken: {
 								nest.length = 0; rv=text;
@@ -62,12 +62,13 @@ var BuilderHighlightRules = function() {
 					return rv;
 				}
 				,
-				regex: "{(?!\\|)"
+				regex: "{(?!\\|)",
+				merge: false
 			},{
 			//'}' Close brace. Need to drop from stack if it is onstack.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length!==0) {
 						switch (nest[0]) {
 							case mbrace: {
 								rv=mbrace;
@@ -103,12 +104,13 @@ var BuilderHighlightRules = function() {
 					}
 					return rv;
 				},
-				regex: "\@\\w+\\("
+				regex: "@\\w+\\(",
+				merge: false
 			},{
 			// ',' commas should be macro if we are currently doing macroparms.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length!==0) {
 						rv=nest[0];
 						if (nest[0]==mparm) {
 							rv=nest[1];
@@ -116,12 +118,13 @@ var BuilderHighlightRules = function() {
 					}
 					return rv;
 				},
-				regex: ","
+				regex: ",",
+				merge:false
 			},{
 			// ')' close macro/bracket.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length!==0) {
 						switch (nest[0]) {
 							case mbrace: { //@bold(({4)) currently breaks in builder.
 								nest.unshift(broken);
@@ -129,7 +132,7 @@ var BuilderHighlightRules = function() {
 							} break; //in a brace
 							case bracket: {
 								nest.shift();
-								if (nest.length!=0) {
+								if (nest.length!==0) {
 									rv=nest[0];
 								} else {
 									rv=text;
@@ -146,7 +149,7 @@ var BuilderHighlightRules = function() {
 							case mparm: {
 								nest.shift();
 								rv=macro;
-								if (nest.length!=0) {
+								if (nest.length!==0) {
 									if(nest[0] == internal || nest[0] == macro) {
 										rv = nest[0];
 										nest.shift();
@@ -158,12 +161,13 @@ var BuilderHighlightRules = function() {
 					}
 					return rv;
 				},
-				regex: "\\)"
+				regex: "\\)",
+				merge:false
 			},{
 			// '(' Open bracket. Acts as a visible brace.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length!==0) {
 						switch (nest[0]) {
 							case broken: {
 								rv=broken;
@@ -176,22 +180,27 @@ var BuilderHighlightRules = function() {
 					}
 					return rv;
 				},
-				regex: "\\("
+				regex: "\\(",
+				merge:false
 			},{
 			//Solitary Pipe char. This is doing the same as normal text.
 				token : function (x) {
 					var rv=text;
-					if (nest.length!=0) {
+					if (nest.length!==0) {
 						rv=nest[0];
 					} return rv;
 				},
+				regex: "\\|",
+				merge: true
+
+			},{
 			//Any non-builder strings. Colour is top of the nest.
-				token : function (x) { var rv=text; if (nest.length!=0) { rv=nest[0];} return rv;},
+				token : function (x) { var rv=text; if (nest.length!==0) { rv=nest[0];} return rv;},
 				regex: "[^{|}@(,)]+"
 			},{
 			//Literals are self contained.
 				token : function (x) {
-					var rv="meta"; if (nest.length!=0 && nest[0]==comment) { rv = comment; }
+					var rv="meta"; if (nest.length!==0 && nest[0]==comment) { rv = comment; }
 					return rv;
 				},
 				regex : "{\\|",
@@ -202,20 +211,21 @@ var BuilderHighlightRules = function() {
 					nest.unshift(broken);
 					return nest[0];
 				},
-				regex: "@"
+				regex: "@",
+				merge: false
 			}
 	],
 	"meta" : [
 			{
 				token : function (x) {
-					var rv="meta"; if (nest.length!=0 && nest[0]==comment) {rv=comment;}
+					var rv="meta"; if (nest.length!==0 && nest[0]==comment) {rv=comment;}
 					return rv;
 				},
 				regex : "\\|}",
 				next : "start"
 			},{
 				token : function (x) {
-					var rv="meta"; if (nest.length!=0 && nest[0]==comment) {rv=comment;}
+					var rv="meta"; if (nest.length!==0 && nest[0]==comment) {rv=comment;}
 					return rv;
 				},
 				merge : true,
