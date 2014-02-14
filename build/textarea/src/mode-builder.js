@@ -23,12 +23,13 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-__ace_shadowed__.define('ace/mode/builder_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+__ace_shadowed__.define('ace/mode/builder_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules', 'ace/mode/builder_comment_highlight_rules'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
 var lang = require("../lib/lang");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var BuilderCommentHighlightRules = require("./builder_comment_highlight_rules").BuilderCommentHighlightRules;
 
 var BuilderHighlightRules = function() {
 	var internals = ['iAppend','iBase64','iBirth','iConsole','iContent','iDate','iDeath','iDecode','iDigest','iEmbed','iEncode','iEq','iEqFamily','iEqNode','iEqSibs','iEval','iExistContent','iExistMedia','iExistNode','iExists','iExistSimilar','iField','iForAncestry','iForIndex','iForNodes','iForPeers','iForQuery','iForSibs','iForSimilar','iForSubs','iForTax','iForTaxNodes','iFullBuild','iGet','iHex','iID','iIndex','iLang','iLangID','iLayout','iLayoutName','iLeft','iLength','iLink','iLinkRef','iLower','iMath','iMedia','iMid','iNull','iNumChildren','iNumGen','iNumGens','iNumPage','iNumPages','iNumSib','iPosition','iPreview','iRegex','iRembr','iRembrp','iReplace','iReset','iRight','iSegmentName','iSet','iSetCache','iShortTitle','iSig','iSuffix','iTax','iTeam','iTech','iTiming','iTitle','iTrim','iUnHex','iUpper','iUrlEncode','iUse'];
@@ -44,6 +45,7 @@ var BuilderHighlightRules = function() {
 	/* If we are not in a macro then nest is empty. */
 	this.$rules = {
 		"start": [ //start is always 'text'.
+            BuilderCommentHighlightRules.getStartRule("start"),
 			{
 			//'{' Entering into a brace.
 				token : function (x) {
@@ -183,29 +185,6 @@ var BuilderHighlightRules = function() {
 				regex: "\\(",
 				merge:false
 			},{
-			//Solitary Pipe char. This is doing the same as normal text.
-				token : function (x) {
-					var rv=text;
-					if (nest.length!==0) {
-						rv=nest[0];
-					} return rv;
-				},
-				regex: "\\|",
-				merge: true
-
-			},{
-			//Any non-builder strings. Colour is top of the nest.
-				token : function (x) { var rv=text; if (nest.length!==0) { rv=nest[0];} return rv;},
-				regex: "[^{|}@(,)]+"
-			},{
-			//Literals are self contained.
-				token : function (x) {
-					var rv="meta"; if (nest.length!==0 && nest[0]==comment) { rv = comment; }
-					return rv;
-				},
-				regex : "{\\|",
-				next  : "meta"
-			},{
 			//'@' At-signs that are not literals or macros are invalid.
 				token : function (x) {
 					nest.unshift(broken);
@@ -215,27 +194,57 @@ var BuilderHighlightRules = function() {
 				merge: false
 			}
 	],
-	"meta" : [
-			{
-				token : function (x) {
-					var rv="meta"; if (nest.length!==0 && nest[0]==comment) {rv=comment;}
-					return rv;
-				},
-				regex : "\\|}",
-				next : "start"
-			},{
-				token : function (x) {
-					var rv="meta"; if (nest.length!==0 && nest[0]==comment) {rv=comment;}
-					return rv;
-				},
-				merge : true,
-				regex : "(?:[^|]|\\|(?!}))+"
-			}
-		]
 	};
+    this.embedRules(BuilderCommentHighlightRules, "doc-",
+        [ BuilderCommentHighlightRules.getEndRule("start") ]);
+
 };
 
 oop.inherits(BuilderHighlightRules, TextHighlightRules);
 
 exports.BuilderHighlightRules = BuilderHighlightRules;
+});
+__ace_shadowed__.define('ace/mode/builder_comment_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+
+
+var oop = require("../lib/oop");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+var BuilderCommentHighlightRules = function() {
+	this.$rules = {
+		"start": [
+            {
+                token : "comment.doc",
+                merge : true,
+                regex : "([^|])+"
+            },{
+                token : "comment.doc",
+                merge : true,
+                regex : "(\\|(?!\\}))*"
+            }
+        ]
+    };
+};
+
+oop.inherits(BuilderCommentHighlightRules, TextHighlightRules);
+
+BuilderCommentHighlightRules.getStartRule = function(start) {
+    return {
+        token : "macrotext", // doc comment
+        merge : true,
+        regex : "{\\|",
+        next  : start
+    };
+};
+
+BuilderCommentHighlightRules.getEndRule = function (start) {
+    return {
+        token : "macrotext", // closing comment
+        merge : true,
+        regex : "\\|}",
+        next  : start
+    };
+};
+
+exports.BuilderCommentHighlightRules = BuilderCommentHighlightRules;
 });
