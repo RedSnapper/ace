@@ -134,7 +134,7 @@ exports.cssText = "\
   visibility: inherit;\
 }\
 \
-.ace-dawn .ace_invalid.ace_illegal {\
+.ace-dawn .ace_illegal,.ace-dawn .ace_invalid.ace_illegal {\
   color: #D9D9D9;\
   background: #9D0101;\
 }\
