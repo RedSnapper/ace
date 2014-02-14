@@ -13,7 +13,7 @@ var Mode = function() {
 oop.inherits(Mode, TextMode);
 
 (function() {
-
+    
     this.getNextLineIndent = function(state, line, tab) {
         return this.$getIndent(line);
     };
@@ -185,8 +185,6 @@ var BuilderHighlightRules = function() {
 						rv=nest[0];
 					} return rv;
 				},
-				regex: "\\|"
-			},{
 			//nbsp etc. invisibles.
 				token : "invisible",
 				regex: "[\\u2000-\\u200B\\u00A0\\u180E\\u202F\\u205F\\u3000\\uFEFF]"
@@ -203,7 +201,7 @@ var BuilderHighlightRules = function() {
 				regex : "{\\|",
 				next  : "meta"
 			},{
-			//'@' At-signs that are not literals or macros are illegal.
+			//'@' At-signs that are not literals or macros are invalid.
 				token : function (x) {
 					nest.unshift(broken);
 					return nest[0];
