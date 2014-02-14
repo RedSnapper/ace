@@ -131,15 +131,12 @@ exports.cssText = "\
 }\
 \
 .ace-dawn .ace_invalid{\
-  color: #D9D9D9;\
-  background: #9D0101;\
+  visibility: inherit;\
 }\
 \
 .ace-dawn .ace_invalid.ace_illegal {\
-  text-decoration:underline;\
-font-style:italic;\
-color:#F8F8F8;\
-background-color:#B52A1D;\
+  color: #D9D9D9;\
+  background: #9D0101;\
 }\
 \
 .ace-dawn .ace_invalid.ace_deprecated {\
@@ -205,7 +202,8 @@ color:#A71D5D;\
 \
 .ace-dawn .ace_indent-guide {\
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4+fPnf4ZVq1b9BwAkVQboFQv98gAAAABJRU5ErkJggg==) right repeat-y;\
-}";
+}\
+";
 
     var dom = require("../lib/dom");
     dom.importCssString(exports.cssText, exports.cssClass);
