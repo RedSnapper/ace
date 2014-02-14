@@ -23,11 +23,12 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-__ace_shadowed__.define('ace/mode/builder_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang'], function(require, exports, module) {
+__ace_shadowed__.define('ace/mode/builder_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
 var lang = require("../lib/lang");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var BuilderHighlightRules = function() {
 	var internals = ['iAppend','iBase64','iBirth','iConsole','iContent','iDate','iDeath','iDecode','iDigest','iEmbed','iEncode','iEq','iEqFamily','iEqNode','iEqSibs','iEval','iExistContent','iExistMedia','iExistNode','iExists','iExistSimilar','iField','iForAncestry','iForIndex','iForNodes','iForPeers','iForQuery','iForSibs','iForSimilar','iForSubs','iForTax','iForTaxNodes','iFullBuild','iGet','iHex','iID','iIndex','iLang','iLangID','iLayout','iLayoutName','iLeft','iLength','iLink','iLinkRef','iLower','iMath','iMedia','iMid','iNull','iNumChildren','iNumGen','iNumGens','iNumPage','iNumPages','iNumSib','iPosition','iPreview','iRegex','iRembr','iRembrp','iReplace','iReset','iRight','iSegmentName','iSet','iSetCache','iShortTitle','iSig','iSuffix','iTax','iTeam','iTech','iTiming','iTitle','iTrim','iUnHex','iUpper','iUrlEncode','iUse'];
@@ -184,10 +185,6 @@ var BuilderHighlightRules = function() {
 						rv=nest[0];
 					} return rv;
 				},
-			//nbsp etc. invisibles.
-				token : "invisible",
-				regex: "[\\u2000-\\u200B\\u00A0\\u180E\\u202F\\u205F\\u3000\\uFEFF]"
-			},{
 			//Any non-builder strings. Colour is top of the nest.
 				token : function (x) { var rv=text; if (nest.length!=0) { rv=nest[0];} return rv;},
 				regex: "[^{|}@(,)]+"
@@ -228,7 +225,7 @@ var BuilderHighlightRules = function() {
 	};
 };
 
-oop.inherits(BuilderHighlightRules);
+oop.inherits(BuilderHighlightRules, TextHighlightRules);
 
 exports.BuilderHighlightRules = BuilderHighlightRules;
 });
