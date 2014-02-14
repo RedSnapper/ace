@@ -134,7 +134,7 @@ exports.cssText = "\
   visibility: inherit;\
 }\
 \
-.ace-dawn .ace_illegal,.ace-dawn .ace_invalid.ace_illegal {\
+.ace-dawn .ace_invalid.ace_illegal {\
   color: #D9D9D9;\
   background: #9D0101;\
 }\
@@ -148,6 +148,9 @@ color:#B52A1D;\
 .ace-dawn .ace_support {\
   color: #00911A;\
 }\
+.ace-dawn .ace_support.ace_type {\
+  color: #B4371F;\
+}\
 \
 .ace-dawn .ace_support.ace_constant {\
   color:#B4371F;\
@@ -160,6 +163,10 @@ color:#B52A1D;\
 \
 .ace-dawn .ace_function{\
   color: #02158C;\
+}\
+\
+.ace-dawn .ace_function.ace_buildin{\
+  color: #006CFF;\
 }\
 \
 .ace-dawn .ace_support.ace_function {\
@@ -180,12 +187,21 @@ color:#A71D5D;\
 }\
 \
 .ace-dawn .ace_comment {\
+  color: #8D9D44;\
+  font-style: normal;\
+}\
+\
+.ace-dawn .ace_comment.ace_documentation {\
   font-style:italic;\
   color: #969696;\
 }\
 \
 .ace-dawn .ace_variable {\
   color: #1C9900;\
+}\
+\
+.ace-dawn .ace_variable.ace_parameter {\
+  color: #1C6900;\
 }\
 \
 .ace-dawn .ace_markup.ace_underline {\
