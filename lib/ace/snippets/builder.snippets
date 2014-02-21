@@ -100,13 +100,13 @@ snippet fortaxnodes
 snippet get
 	@iGet(~${1:VAR})
 snippet hex
-	@iHex(${1:CONTENT},${2:[COMPARATOR,TRUE,FALSE]})
+	@iHex(${1:CONTENT},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet id
 	@iID(${1:NODE})
 snippet lang
-	@iLang(${1:[COMPARATOR,TRUE,FALSE]})
+	@iLang(${1:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet langid
-	@iLangID(${1:[COMPARATOR,TRUE,FALSE]})
+	@iLangID(${1:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet layout
 	@iLayout(${1:NODE},${2:COMPARATOR},${3:TRUE},${4:FALSE})
 snippet la
@@ -114,13 +114,13 @@ snippet la
 snippet layoutname
 	@iLayoutName(${1:NODE},${2:[COMP,TRUE,FALSE]})
 snippet left
-	@iLeft(${1:INPUT},${2:OFFSET},${3:[COMPARATOR,TRUE,FALSE]})
+	@iLeft(${1:INPUT},${2:OFFSET},${3:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet length
-	@iLength(${1:INPUT},${2:[COMPARATOR,TRUE,FALSE]})
+	@iLength(${1:INPUT},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet link
 	@iLink(${1:NODE[:OFFSET]})
 snippet linkref
-	@iLinkRef(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+	@iLinkRef(${1:NODE},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet lower
 	@iLower(${1:STRING},${2:[COMPARATOR,TURE,FALSE]})
 snippet math
@@ -134,16 +134,83 @@ snippet index
 snippet null
 	@iNull(${1:CONTENT})
 snippet numchildren
-	@iNumChildren(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+	@iNumChildren(${1:NODE},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet numc
-	@iNumChildren(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+	@iNumChildren(${1:NODE},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet numgen
-	@iNumGen(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+	@iNumGen(${1:NODE},${2:${2:[COMPARATOR,TRUE,FALSE]}})
 snippet numg
-	@iNumGen(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
-
+	@iNumGen(${1:NODE},${2:${2:[COMPARATOR,TRUE,FALSE]}})
+snippet numgens
+	@iNumGens(${1:[COMPARATOR,TRUE,FALSE]})
+snippet numpage
+	@iNumPage(${1:[COMPARATOR,TRUE,FALSE]})
+snippet nump
+	@iNumPage(${1:[COMPARATOR,TRUE,FALSE]})
+snippet numpages
+	@iNumPages(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet numsib
+	@iNumSib(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet nums
+	@iNumSib(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet position
+	@iPosition(${1:HAYSTACK},${2:NEEDLE},${3:[COMPARATOR,TRUE,FALSE]})
+snippet pos
+	@iPosition(${1:HAYSTACK},${2:NEEDLE},${3:[COMPARATOR,TRUE,FALSE]})
+snippet preview
+	@iPreview(${1:PREVIEW},${2:LIVE})
+snippet pr
+	@iPreview(${1:PREVIEW},${2:LIVE})
+snippet regex
+	@iRegex(${1:NEEDLE},${2:REPLACE},${3:HAYSTACK})
+snippet reg
+	@iRegex(${1:NEEDLE},${2:REPLACE},${3:HAYSTACK})
+snippet rembr
+	@iRembr(${1:CONTENT})
+snippet rembrp
+	@iRembrp(${1:CONTENT})
+snippet replace
+	@iReplace(${1:NEEDLE},${2:REPLACE},${3:HAYSTACK})
+snippet rep
+	@iReplace(${1:NEEDLE},${2:REPLACE},${3:HAYSTACK})
+snippet reset
+	@iReset(${1:VARIABLE})
+snippet res
+	@iReset(${1:VARIABLE})
+snippet right
+	@iRight(${1:INPUT},${2:OFFSET},${3:[COMPARATOR,TRUE,FALSE]})
+snippet segmentname
+	@iSegmentName(${1:[COMPARATOR,TRUE,FALSE]})
 snippet set
-	@iSet(~${1:VAR})
+	@iSet(~${1:VAR},${2:VALUE})
+snippet setcache
+	@iSetCache(${1:VARIABLE},${2:VALUE})
+snippet sig
+	@iSig(${1:VARIABLE},${2:TRUE},${3:FALSE})
+snippet shorttitle
+	@iShortTitle(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet stitle
+	@iShortTitle(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet suffix
+	@iSuffix(${1:NODE:OFFSET},${2:[COMPARATOR,TRUE,FALSE]})
+snippet tax
+	@iTax(${1:NODE},${2:META},${3:[COMPARATOR,TRUE,FALSE]})
+snippet team
+	@iTeam(${2:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet tech
+	@iTech(${1:[COMPARATOR,TRUE,FALSE]})
+snippet timing
+	@iTiming(${1:MODE})
+snippet title
+	@iTitle(${1:NODE},${2:[COMPARATOR,TRUE,FALSE]})
+snippet urlencode
+	@iUrlEncode(${1:CONTENT})
+snippet unhex
+	@iUnHex(${1:CONTENT},${2:[COMPARATOR,TRUE,FALSE]})
+snippet upper
+	@iUpper(${1:CONTENT},${2:[COMPARATOR,TRUE,FALSE]})
+snippet use
+	@iUse(${1:VARIABLE})
 
 #HTML
 snippet .
