@@ -15,3 +15,6 @@ Macro With brackets
 
 Macro With Literal
 @test(ddd,{|ddd,ddffddff|})
+
+Macro with braces
+@test(ddd,ddd{dd,d})
