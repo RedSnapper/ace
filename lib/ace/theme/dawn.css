@@ -77,6 +77,11 @@
   font-style: normal;
 }
 
+.ace-dawn .ace_meta.ace_tag {
+  color: #811F24;
+  font-style: normal;
+}
+
 .ace-dawn .ace_constant, .ace-dawn .ace_constant.ace_other {
   color: #00911A;
 }

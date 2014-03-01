@@ -13,6 +13,9 @@ Comment
 Internal Macro
 @iLink(ddd,ddd)
 
+Markup macro
+@wLi(,)
+
 Literal
 {| Literal @test() () , @|}
 
