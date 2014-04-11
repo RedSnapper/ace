@@ -1,0 +1,1 @@
+(function(){window.require(["ace/ext/language_tools"],function(){})})()
