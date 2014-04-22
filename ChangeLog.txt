@@ -1,5 +1,7 @@
 2014.03.08 Version 1.1.3
 
+* Just testing git module management
+
 * New Features
   - Allow syntax checkers to be loaded from CDN (Derk-Jan Hartman)
   - Add ColdFusion behavior (Abram Adams)
