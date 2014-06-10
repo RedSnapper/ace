@@ -34,6 +34,8 @@ Macro with braces
 Macro with everything
 @test(dd,{dd,dd},{|ddd|},@test(ddd),(dddd),@)
 
+{|{|}
+
 Macro multiline
 
 @test(dd,
