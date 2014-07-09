@@ -45,7 +45,7 @@ Macro multiline
 	(dddd),
 @)
 
-
+@iRegex((()))
 
 
 
