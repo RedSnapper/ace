@@ -1,0 +1,53 @@
+Normal macro 
+⌽test(ddd,ddd,ddffddff)
+
+Invalid
+⌽
+
+No Params
+⌽test()
+
+Comment
+⌽comment(dddd)
+
+Internal Macro
+⌽iLink(ddd,ddd)
+
+Markup macro
+⌽wLi(,)
+
+
+
+Braces
+⎡braces⎤
+
+Macro With brackets
+⌽test(ddd,ddd,dd(ffddff))
+
+
+Macro with braces
+⌽test(ddd,ddd⎡dd,d⎤)
+
+Macro with everything
+⌽test(dd,⎡dd,dd⎤,⌽test(ddd),(dddd),⌽)
+
+
+
+Macro multiline
+
+⌽test(dd,
+	⎡dd,dd⎤,
+	⎡|ddd|⎤,
+	⌽test(ddd),
+	(dddd),
+⌽)
+
+⌽iRegex((()))
+
+
+
+
+
+
+
+
