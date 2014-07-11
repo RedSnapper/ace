@@ -176,6 +176,10 @@ color:#A71D5D;
   color:#19356D;
 }
 
+.ace-dawn .ace_variable.ace_language{
+  color: #7B9B9E;
+}
+
 .ace-dawn .ace_markup.ace_list {
   color:#693A17;
 }
