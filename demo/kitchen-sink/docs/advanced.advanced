@@ -16,9 +16,23 @@ Internal Macro
 Markup macro
 ⌽wLi(,)
 
-⍟3
-⍟(n)
-⍟(i)
+//numbered parms
+⍟312
+⍟(3)
+⍟(3+)
+
+//repeated macro
+⍟(k) (number in a repeated macro)
+⍟(j) (parm+1 in a repeated macro)
+⍟(n) (number of parms in a repeated macro)
+⍟(i) (current parm in a repeated macro)
+
+//stack pointer
+⍟0      //name of self  
+⍟(p)    //name of caller
+⍟(p0)   // ditto
+⍟(p1)   //name of caller's caller
+⍟(ps)   //stack (semicolon delimited)
 
 Braces
 ⎡braces⎤
