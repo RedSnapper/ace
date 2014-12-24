@@ -184,21 +184,21 @@ env.editor.commands.addCommands([{
     }
 }, {
     name: "increaseFontSize",
-    bindKey: "Ctrl-+",
+    bindKey: "Ctrl-=|Ctrl-+",
     exec: function(editor) {
         var size = parseInt(editor.getFontSize(), 10) || 12;
         editor.setFontSize(size + 1);
     }
 }, {
     name: "decreaseFontSize",
-    bindKey: "Ctrl+-",
+    bindKey: "Ctrl+-|Ctrl-_",
     exec: function(editor) {
         var size = parseInt(editor.getFontSize(), 10) || 12;
         editor.setFontSize(Math.max(size - 1 || 1));
     }
 }, {
     name: "resetFontSize",
-    bindKey: "Ctrl+0",
+    bindKey: "Ctrl+0|Ctrl-Numpad0",
     exec: function(editor) {
         editor.setFontSize(12);
     }
@@ -415,28 +415,11 @@ bindDropdown("folding", function(value) {
 });
 
 bindDropdown("soft_wrap", function(value) {
-    var session = env.editor.session;
-    var renderer = env.editor.renderer;
-    switch (value) {
-        case "off":
-            session.setUseWrapMode(false);
-            renderer.setPrintMarginColumn(80);
-            break;
-        case "free":
-            session.setUseWrapMode(true);
-            session.setWrapLimitRange(null, null);
-            renderer.setPrintMarginColumn(80);
-            break;
-        default:
-            session.setUseWrapMode(true);
-            var col = parseInt(value, 10);
-            session.setWrapLimitRange(col, col);
-            renderer.setPrintMarginColumn(col);
-    }
+    env.editor.setOption("wrap", value);
 });
 
 bindCheckbox("select_style", function(checked) {
-    env.editor.setSelectionStyle(checked ? "line" : "text");
+    env.editor.setOption("selectionStyle", checked ? "line" : "text");
 });
 
 bindCheckbox("highlight_active", function(checked) {
@@ -548,7 +531,7 @@ new StatusBar(env.editor, cmdLine.container);
 
 
 var Emmet = require("ace/ext/emmet");
-net.loadScript("http://nightwing.github.io/emmet-core/emmet.js", function() {
+net.loadScript("https://nightwing.github.io/emmet-core/emmet.js", function() {
     Emmet.setCore(window.emmet);
     env.editor.setOption("enableEmmet", true);
 });
@@ -592,7 +575,7 @@ env.editSnippets = function() {
 require("ace/ext/language_tools");
 env.editor.setOptions({
     enableBasicAutocompletion: true,
-    enableLiveAutocomplete: true,
+    enableLiveAutocompletion: false,
     enableSnippets: true
 });
 

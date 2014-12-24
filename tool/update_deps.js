@@ -1,7 +1,7 @@
-var https = require("https")
-  , http = require("http")
-  , url = require("url")
-  , fs = require("fs");
+var https = require("https");
+var http = require("http");
+var url = require("url");
+var fs = require("fs");
 
 var Path = require("path");
 var spawn = require("child_process").spawn;
@@ -72,7 +72,7 @@ var deps = {
     xqlint: {
        path: "mode/xquery/xqlint.js",
        browserify: {
-           npmModule: "git+https://github.com/wcandillon/xqlint.git#0.0.8",
+           npmModule: "git+https://github.com/wcandillon/xqlint.git#master",
            path: "xqlint/lib/xqlint.js",
            exports: "XQLint"
        },
@@ -85,7 +85,7 @@ var deps = {
     jshint: {
         path: "mode/javascript/jshint.js",
         browserify: {
-            npmModule: "git+https://github.com/nightwing/jshint.git#master",
+            npmModule: "git+https://github.com/ajaxorg/jshint.git#master",
             path: "jshint/src/jshint.js",
             exports: "jshint"
         },
@@ -116,6 +116,22 @@ var deps = {
                         "var userData = res.getVocabulary('user') || {};\n" +
                         "res.setVocabulary(require('utils').deepMerge(userData, snippets), 'user');\n" +
                         "});";
+            });
+        }
+    },
+    vim: {
+        fetch: function(){
+            var rootHref = "https://raw.githubusercontent.com/codemirror/CodeMirror/master/"
+            var fileMap = {"keymap/vim.js": "keyboard/vim.js", "test/vim_test.js": "keyboard/vim_test.js"};
+            async.forEach(Object.keys(fileMap), function(x, next) {
+                download(rootHref + x, function(e, d) {
+                    d = d.replace(/^\(function.*{[^{}]+^}[^{}]+{/m, "define(function(require, exports, module) {");
+                    d = d.replace(/^\s*return vimApi;\s*};/gm, "  //};")
+                        .replace("var Vim = function() {", "$& return vimApi; } //{")
+                    fs.writeFile(rootDir + fileMap[x], d, next)
+                })
+            }, function() {
+                console.log("done")
             });
         }
     },
