@@ -184,21 +184,21 @@ env.editor.commands.addCommands([{
     }
 }, {
     name: "increaseFontSize",
-    bindKey: "Ctrl-+",
+    bindKey: "Ctrl-=|Ctrl-+",
     exec: function(editor) {
         var size = parseInt(editor.getFontSize(), 10) || 12;
         editor.setFontSize(size + 1);
     }
 }, {
     name: "decreaseFontSize",
-    bindKey: "Ctrl+-",
+    bindKey: "Ctrl+-|Ctrl-_",
     exec: function(editor) {
         var size = parseInt(editor.getFontSize(), 10) || 12;
         editor.setFontSize(Math.max(size - 1 || 1));
     }
 }, {
     name: "resetFontSize",
-    bindKey: "Ctrl+0",
+    bindKey: "Ctrl+0|Ctrl-Numpad0",
     exec: function(editor) {
         editor.setFontSize(12);
     }
@@ -299,6 +299,7 @@ var showHScrollEl = document.getElementById("show_hscroll");
 var showVScrollEl = document.getElementById("show_vscroll");
 var animateScrollEl = document.getElementById("animate_scroll");
 var softTabEl = document.getElementById("soft_tab");
+var navigateWithinSoftTabEl = document.getElementById("navigate_within_soft_tab");
 var behavioursEl = document.getElementById("enable_behaviours");
 
 fillDropdown(docEl, doclist.all);
@@ -368,13 +369,14 @@ function updateUIEditorOptions() {
     saveOption(showHScrollEl, editor.renderer.getHScrollBarAlwaysVisible());
     saveOption(animateScrollEl, editor.getAnimatedScroll());
     saveOption(softTabEl, session.getUseSoftTabs());
+    saveOption(navigateWithinSoftTabEl, session.getNavigateWithinSoftTabs());
     saveOption(behavioursEl, editor.getBehavioursEnabled());
 }
 
 themelist.themes.forEach(function(x){ x.value = x.theme });
 fillDropdown(themeEl, {
     Bright: themelist.themes.filter(function(x){return !x.isDark}),
-    Dark: themelist.themes.filter(function(x){return x.isDark}),
+    Dark: themelist.themes.filter(function(x){return x.isDark})
 });
 
 event.addListener(themeEl, "mouseover", function(e){
@@ -415,28 +417,11 @@ bindDropdown("folding", function(value) {
 });
 
 bindDropdown("soft_wrap", function(value) {
-    var session = env.editor.session;
-    var renderer = env.editor.renderer;
-    switch (value) {
-        case "off":
-            session.setUseWrapMode(false);
-            renderer.setPrintMarginColumn(80);
-            break;
-        case "free":
-            session.setUseWrapMode(true);
-            session.setWrapLimitRange(null, null);
-            renderer.setPrintMarginColumn(80);
-            break;
-        default:
-            session.setUseWrapMode(true);
-            var col = parseInt(value, 10);
-            session.setWrapLimitRange(col, col);
-            renderer.setPrintMarginColumn(col);
-    }
+    env.editor.setOption("wrap", value);
 });
 
 bindCheckbox("select_style", function(checked) {
-    env.editor.setSelectionStyle(checked ? "line" : "text");
+    env.editor.setOption("selectionStyle", checked ? "line" : "text");
 });
 
 bindCheckbox("highlight_active", function(checked) {
@@ -477,6 +462,10 @@ bindCheckbox("animate_scroll", function(checked) {
 
 bindCheckbox("soft_tab", function(checked) {
     env.editor.session.setUseSoftTabs(checked);
+});
+
+bindCheckbox("navigate_within_soft_tab", function(checked) {
+    env.editor.session.setNavigateWithinSoftTabs(checked);
 });
 
 bindCheckbox("enable_behaviours", function(checked) {
@@ -548,7 +537,7 @@ new StatusBar(env.editor, cmdLine.container);
 
 
 var Emmet = require("ace/ext/emmet");
-net.loadScript("http://nightwing.github.io/emmet-core/emmet.js", function() {
+net.loadScript("https://cloud9ide.github.io/emmet-core/emmet.js", function() {
     Emmet.setCore(window.emmet);
     env.editor.setOption("enableEmmet", true);
 });
@@ -592,11 +581,60 @@ env.editSnippets = function() {
 require("ace/ext/language_tools");
 env.editor.setOptions({
     enableBasicAutocompletion: true,
-    enableLiveAutocomplete: true,
+    enableLiveAutocompletion: false,
     enableSnippets: true
 });
 
 var beautify = require("ace/ext/beautify");
 env.editor.commands.addCommands(beautify.commands);
+
+
+// global keybindings
+
+var KeyBinding = require("ace/keyboard/keybinding").KeyBinding;
+var CommandManager = require("ace/commands/command_manager").CommandManager;
+var commandManager = new CommandManager();
+var kb = new KeyBinding({
+    commands: commandManager,
+    fake: true
+});
+event.addCommandKeyListener(document.documentElement, kb.onCommandKey.bind(kb));
+event.addListener(document.documentElement, "keyup", function(e) {
+    if (e.keyCode === 18) // do not trigger browser menu on windows
+        e.preventDefault();
+});
+commandManager.addCommands([{
+    name: "window-left",
+    bindKey: {win: "cmd-alt-left", mac: "ctrl-cmd-left"},
+    exec: function() {
+        moveFocus();
+    }
+}, {
+    name: "window-right",
+    bindKey: {win: "cmd-alt-right", mac: "ctrl-cmd-right"},
+    exec: function() {
+        moveFocus();
+    }
+}, {
+    name: "window-up",
+    bindKey: {win: "cmd-alt-up", mac: "ctrl-cmd-up"},
+    exec: function() {
+        moveFocus();
+    }
+}, {
+    name: "window-down",
+    bindKey: {win: "cmd-alt-down", mac: "ctrl-cmd-down"},
+    exec: function() {
+        moveFocus();
+    }
+}]);
+
+function moveFocus() {
+    var el = document.activeElement;
+    if (el == env.editor.textInput.getElement())
+        env.editor.cmdLine.focus();    
+    else
+        env.editor.focus();
+}
 
 });

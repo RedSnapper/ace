@@ -87,26 +87,40 @@ var fallbackScopes = {
     "variable": "entity.name.function"
 };
 
+// Taken from .ace-tm
+var defaultGlobals = {
+    "printMargin": "#e8e8e8",
+    "background": "#ffffff",
+    "foreground": "#000000",
+    "gutter": "#f0f0f0",
+    "selection": "rgb(181, 213, 255)",
+    "step": "rgb(198, 219, 174)",
+    "bracket": "rgb(192, 192, 192)",
+    "active_line": "rgba(0, 0, 0, 0.07)",
+    "cursor": "#000000",
+    "invisible": "rgb(191, 191, 191)",
+    "fold": "#6b72e6"
+};
+
 function extractStyles(theme) {
     var globalSettings = theme.settings[0].settings;
 
     var colors = {
-        "printMargin": "#e8e8e8",
-        "background": parseColor(globalSettings.background),
-        "foreground": parseColor(globalSettings.foreground),
-        "gutter": "#e8e8e8",
-        "selection": parseColor(globalSettings.selection),
-        "step": "rgb(198, 219, 174)",
-        "bracket": parseColor(globalSettings.invisibles),
-        "active_line": parseColor(globalSettings.lineHighlight),
-        "cursor": parseColor(globalSettings.caret),
-
-        "invisible": "color: " + parseColor(globalSettings.invisibles) + ";"
+        "printMargin": defaultGlobals.printMargin,
+        "background": parseColor(globalSettings.background) || defaultGlobals.background,
+        "foreground": parseColor(globalSettings.foreground) || defaultGlobals.foreground,
+        "gutter": defaultGlobals.gutter,
+        "selection": parseColor(globalSettings.selection) || defaultGlobals.selection,
+        "step": defaultGlobals.step,
+        "bracket": parseColor(globalSettings.invisibles) || defaultGlobals.bracket,
+        "active_line": parseColor(globalSettings.lineHighlight) || defaultGlobals.active_line,
+        "cursor": parseColor(globalSettings.caret) || defaultGlobals.cursor,
+        "invisible": "color: " + (parseColor(globalSettings.invisibles) || defaultGlobals.invisible) + ";"
     };
 
     for (var i=1; i<theme.settings.length; i++) {
         var element = theme.settings[i];
-        if (!element.scope)
+        if (!element.scope || !element.settings)
             continue;
         var scopes = element.scope.split(/\s*[|,]\s*/g);
         for (var j = 0; j < scopes.length; j++) {
@@ -115,7 +129,7 @@ function extractStyles(theme) {
         
             var aceScope = supportedScopes[scope];
             if (aceScope) {
-                colors[aceScope] = style;                
+                colors[aceScope] = style;
             }
             else if (style) {
                 unsupportedScopes[scope] = (unsupportedScopes[scope] || 0) + 1;
@@ -132,31 +146,53 @@ function extractStyles(theme) {
         var foldSource = colors["entity.name.function"] || colors.keyword;
         if (foldSource) {
             colors.fold = foldSource.match(/\:([^;]+)/)[1];
+        } else {
+            colors.fold = defaultGlobals.fold;
         }
     }
+    
+    colors.gutterBg = colors.background
+    colors.gutterFg = mix(colors.foreground, colors.background, 0.5)
 
     if (!colors.selected_word_highlight)
         colors.selected_word_highlight =  "border: 1px solid " + colors.selection + ";";
 
     colors.isDark = (luma(colors.background) < 0.5) + "";
-
+    
     return colors;
 };
 
-function luma(color) {
+function mix(c1, c2, a1, a2) {
+    c1 = rgbColor(c1);
+    c2 = rgbColor(c2);
+    if (a2 === undefined)
+        a2 = 1 - a1
+    return "rgb(" + [
+        Math.round(a1*c1[0] + a2*c2[0]),
+        Math.round(a1*c1[1] + a2*c2[1]),
+        Math.round(a1*c1[2] + a2*c2[2])
+    ].join(",") + ")";
+}
+
+function rgbColor(color) {
+    if (typeof color == "object")
+        return color;
     if (color[0]=="#")
-        var rgb = color.match(/^#(..)(..)(..)/).slice(1).map(function(c) {
+        return color.match(/^#(..)(..)(..)/).slice(1).map(function(c) {
             return parseInt(c, 16);
         });
     else
-        var rgb = color.match(/\(([^,]+),([^,]+),([^,]+)/).slice(1).map(function(c) {
+        return color.match(/\(([^,]+),([^,]+),([^,]+)/).slice(1).map(function(c) {
             return parseInt(c, 10);
         });
-
+}
+function luma(color) {
+    var rgb = rgbColor(color);
     return (0.21 * rgb[0] + 0.72 * rgb[1] + 0.07 * rgb[2]) / 255;
 }
 
 function parseColor(color) {
+    if (!color.length) return null;
     if (color.length == 4)
         color = color.replace(/[a-fA-F\d]/g, "$&$&");
     if (color.length == 7)
@@ -206,8 +242,8 @@ function quoteString(str) {
     return '"' + str.replace(/\\/, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\\n") + '"';
 }
 
-var cssTemplate = fs.readFileSync(__dirname + "/theme.tmpl.css", "utf8");
-var jsTemplate = fs.readFileSync(__dirname + "/theme.tmpl.js", "utf8");
+var cssTemplate = fs.readFileSync(__dirname + "/templates/theme.css", "utf8");
+var jsTemplate = fs.readFileSync(__dirname + "/templates/theme.js", "utf8");
 
 function normalizeStylesheet(rules) {
     for (var i = rules.length; i--; ) {
@@ -263,9 +299,13 @@ var themes = {
     "xcode": "Xcode_default"
 };
 
-function convertTheme(name) {
+function convertBuiltinTheme(name) {
+    return convertTheme(name, __dirname + "/tmthemes/" + themes[name] + ".tmTheme", __dirname + "/../lib/ace/theme");
+}
+
+function convertTheme(name, tmThemePath, outputDirectory) {
     console.log("Converting " + name);
-    var tmTheme = fs.readFileSync(__dirname + "/tmthemes/" + themes[name] + ".tmTheme", "utf8");
+    var tmTheme = fs.readFileSync(tmThemePath, "utf8");
     parseTheme(tmTheme, function(theme) {
         var styles = extractStyles(theme);
 
@@ -286,7 +326,7 @@ function convertTheme(name) {
         // this way, we preserve all hand-modified rules in the <theme>.css rules,
         // (because some exist, for collab1 and ace_indentation_guide
         try {
-            var outThemeCss = fs.readFileSync(__dirname + "/../lib/ace/theme/" + name + ".css");
+            var outThemeCss = fs.readFileSync(outputDirectory + "/" + name + ".css");
             var oldRules = cssParse(outThemeCss).stylesheet.rules;
             var newRules = cssParse(css).stylesheet.rules;
 
@@ -314,6 +354,7 @@ function convertTheme(name) {
             css = cssStringify({stylesheet: {rules: oldRules}}, { compress: false });
         } catch(e) {
             console.log("Creating new file: " +  name + ".css")
+            css = cssStringify(cssParse(css), { compress: false });
         }
         
         var js = fillTemplate(jsTemplate, {
@@ -323,28 +364,41 @@ function convertTheme(name) {
             isDark: styles.isDark
         });
 
-        fs.writeFileSync(__dirname + "/../lib/ace/theme/" + name + ".js", js);
-        fs.writeFileSync(__dirname + "/../lib/ace/theme/" + name + ".css", css);
+        fs.writeFileSync(outputDirectory + "/" + name + ".js", js);
+        fs.writeFileSync(outputDirectory + "/" + name + ".css", css);
     })
 }
 
-for (var name in themes) {
-    convertTheme(name);
-}
-
-var sortedUnsupportedScopes = {};
-for (var u in unsupportedScopes) {
-    var value = unsupportedScopes[u];
-    if (sortedUnsupportedScopes[value] === undefined) {
-        sortedUnsupportedScopes[value] = [];
+if (process.argv.length > 2) {
+    var args = process.argv.splice(2);
+    if (args.length < 3) {
+        console.error("Usage: node tmtheme.js [theme_name, path/to/theme.tmTheme path/to/output/directory]");
+        process.exit(1);
     }
-    sortedUnsupportedScopes[value].push(u);
+    var name = args[0];
+    var themePath = args[1];
+    var outputDirectory = args[2];
+    convertTheme(name, themePath, outputDirectory);
+} else {
+    for (var name in themes) {
+        convertBuiltinTheme(name);
+    }
 }
 
-console.log("I found these unsupported scopes:");
-console.log(sortedUnsupportedScopes);
-console.log("It's safe to ignore these, but they may affect your syntax highlighting if your mode depends on any of these rules.");
-console.log("Refer to the docs on ace.ajax.org for information on how to add a scope to the CSS generator.");
+if (Object.keys(unsupportedScopes).length > 0) {
+    var sortedUnsupportedScopes = {};
+    for (var u in unsupportedScopes) {
+        var value = unsupportedScopes[u];
+        if (sortedUnsupportedScopes[value] === undefined) {
+            sortedUnsupportedScopes[value] = [];
+        }
+        sortedUnsupportedScopes[value].push(u);
+    }
+    console.log("I found these unsupported scopes:");
+    console.log(sortedUnsupportedScopes);
+    console.log("It's safe to ignore these, but they may affect your syntax highlighting if your mode depends on any of these rules.");
+    console.log("Refer to the docs on ace.ajax.org for information on how to add a scope to the CSS generator.");
+}
 
 
 /*** TODO: generate images for indent guides in node

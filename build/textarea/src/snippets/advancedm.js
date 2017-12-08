@@ -1,1 +1,0 @@
-define("ace/snippets/advancedm",["require","exports","module"],function(e,t,n){t.snippetText="",t.scope="advancedm"})

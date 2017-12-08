@@ -1,51 +1,61 @@
 var editor;
 var embedded_editor;
 $(function() {
-    ace.config.set("workerPath", "build/src-min");
-    editor = ace.edit("ace_editor_demo");
-    editor.container.style.opacity = "";
-    embedded_editor = ace.edit("embedded_ace_code");
-    embedded_editor.container.style.opacity = "";
-    embedded_editor.session.setMode("ace/mode/html");
-    embedded_editor.setAutoScrollEditorIntoView(true);
-    embedded_editor.setOption("maxLines", 40);
-    
-    editor.setOptions({
-        maxLines: 30,
-        mode: "ace/mode/javascript",
-        autoScrollEditorIntoView: true
-    });
-    
-    ace.config.loadModule("ace/ext/emmet", function() {
-        ace.require("ace/lib/net").loadScript("http://nightwing.github.io/emmet-core/emmet.js", function() {
-            embedded_editor.setOption("enableEmmet", true);
-            editor.setOption("enableEmmet", true);
-        });
-    });
-    
-    ace.config.loadModule("ace/ext/language_tools", function() {
-        embedded_editor.setOptions({
-            enableSnippets: true,
-            enableBasicAutocompletion: true
-        });
+    if (typeof ace !== "undefined") {
+        ace.config.set("workerPath", "build/src-min");
+        editor = ace.edit("ace_editor_demo");
+        editor.container.style.opacity = "";
+        embedded_editor = ace.edit("embedded_ace_code");
+        embedded_editor.container.style.opacity = "";
+        embedded_editor.session.setMode("ace/mode/html");
+        embedded_editor.setAutoScrollEditorIntoView(true);
+        embedded_editor.setOption("maxLines", 40);
+        
         editor.setOptions({
-            enableSnippets: true,
-            enableBasicAutocompletion: true
+            maxLines: 30,
+            mode: "ace/mode/javascript",
+            autoScrollEditorIntoView: true
         });
-    });    
-    
+        
+        ace.config.loadModule("ace/ext/emmet", function() {
+            ace.require("ace/lib/net").loadScript("http://cloud9ide.github.io/emmet-core/emmet.js", function() {
+                embedded_editor.setOption("enableEmmet", true);
+                editor.setOption("enableEmmet", true);
+            });
+        });
+        
+        ace.config.loadModule("ace/ext/language_tools", function() {
+            embedded_editor.setOptions({
+                enableSnippets: true,
+                enableBasicAutocompletion: true
+            });
+            editor.setOptions({
+                enableSnippets: true,
+                enableBasicAutocompletion: true
+            });
+        });
+    } else {
+        document.body.insertAdjacentHTML("afterbegin", '<div class="bs-docs-example">\
+            <div class="alert alert-error">\
+              <button type="button" class="close" data-dismiss="alert">\xd7</button>\
+              <strong>Oh No!</strong> Couldn\'t load <code>build/src/ace.js</code>.<br>\
+                You can build it by running <code>npm install ; node Makefile.dryice.js</code><br>\
+                Or download older version by running <code>git submodule update --init --recursive</code><br>\
+            </div>\
+          </div>');
+    }
     $("ul.menu-list").mousedown(function(e) {
         if (e.button === 1) {
             e.preventDefault();
         }
     });
     
-    $("ul.menu-list li").click(function(e) {
+    $("ul.menu-list li").click("click auxclick", function(e) {
         if (e.target.tagName !== "A") {
             var href = $(this).find("a").attr("href");
-            if (e.button == 1)
+            if (e.originalEvent.button == 1)
                 window.open(href, "_blank");
-            else
+            else if (e.originalEvent.button == 0)
                 window.location = href;
         }
     });
@@ -128,7 +138,9 @@ $(function() {
 
         var state = {};
         state.nav = $(this).attr("href").substr(1);
-        $.bbq.pushState(state);
+        var oldState = $.bbq.getState("nav") || "about";
+        if (state.nav != oldState)
+            $.bbq.pushState(state);
      });
 
     $('#tabnav a[data-toggle="tab"]').on('shown', function (e) {
@@ -137,22 +149,22 @@ $(function() {
         });
     });
 
-     $(window).on("hashchange", function(e) {
-         _gaq.push(['_trackPageview',location.pathname + location.search  + location.hash]);
-         tabs.each(function() {
+    $(window).on("hashchange", function(e) {
+        _gaq.push(['_trackPageview',location.pathname + location.search  + location.hash]);
+        tabs.each(function() {
             var idx = $.bbq.getState("nav") || "about";
             var section = e.fragment.split("&")[1] || "";
             $(this).find(tab_a_selector + "[href='#" + idx + "']").triggerHandler('click');
-            
+           
             // handles dropping in from new link
             var api = $.bbq.getState("api");
             if (api) {
                 $(tab_a_selector + "[href='./api/" + api + ".html']").triggerHandler('click');
             }
-         });
-     }).trigger("hashchange");
+        });
+    }).trigger("hashchange");
      
-     highlight();
+    highlight();
 });
 
 
@@ -161,7 +173,11 @@ function highlight() {
     var highlighter = ace.require("ace/ext/static_highlight")
     var dom = ace.require("ace/lib/dom")
     function qsa(sel) {
-        return Array.apply(null, document.querySelectorAll(sel));
+        var els = document.querySelectorAll(sel);
+        var result = [];
+        for (var i = 0, l = els.length; i < l; i++)
+            result[i] = els[i];
+        return result;
     }
 
     qsa("code[class]").forEach(function(el) {
