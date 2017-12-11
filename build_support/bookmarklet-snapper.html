@@ -13,12 +13,54 @@
 <div class="content" style="width: 950px">
     <div class="column1" style="margin-top: 47px">
         <textarea id="textarea" style="width:950px; height:950px">
-/**
- * This is Ace injected using a bookmarklet.
- */
-function foo() {
-    var bar = true;
-}</textarea>
+Normal macro
+@test(ddd,ddd,ddffddff)
+
+Invalid
+@
+
+No Params
+@test()
+
+Comment
+@comment(dddd)
+
+Internal Macro
+@iLink(ddd,ddd)
+
+Markup macro
+@wLi(,)
+
+Literal
+{| Literal @test() () , @|}
+
+Braces
+{ddd}
+
+Macro With brackets
+@test(ddd,ddd,dd(ffddff))
+
+Macro With Literal
+@test(ddd,{|ddd,ddffddff|})
+
+Macro with braces
+@test(ddd,ddd{dd,d})
+
+Macro with everything
+@test(dd,{dd,dd},{|ddd|},@test(ddd),(dddd),@)
+
+{|{|}
+
+Macro multiline
+
+@test(dd,
+	{dd,dd},
+	{|ddd|},
+	@test(ddd),
+	(dddd),
+@)
+
+@iRegex((()))</textarea>
     </div>
 
 </div>
