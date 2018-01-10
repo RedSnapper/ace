@@ -110,6 +110,8 @@ inject({}, function () {
     var t = document.querySelector("textarea");
     textAce = ace.require("ace/ext/textarea-snapper").transformTextarea(t);
 
+    textAce.setOption('useSoftTabs',false)
+
 });
 
 </script>
