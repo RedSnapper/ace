@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <link href="style.css" rel="stylesheet" type="text/css">
   <title>Ace Bookmarklet Builder</title>
+
+    <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
 </head>
 <body>
 
@@ -68,7 +70,36 @@ Macro multiline
 
 <script>
 
-function inject(options, callback) {
+function bindKey(win, mac) {
+    return { win: win, mac: mac };
+}
+
+function getCommands() {
+
+    return [{
+        name: "AdvancedMacroBraceIn",
+        bindKey: bindKey("Alt-[", "Command-["),
+        exec: function(editor) { editor.insert("⎡"); },
+        readOnly: true
+    }, {
+        name: "AdvancedMacroBraceOut",
+        bindKey: bindKey("Alt-]", "Command-]"),
+        exec: function(editor) { editor.insert("⎤"); },
+        readOnly: true
+    }, {
+        name: "AdvancedMacro",
+        bindKey: bindKey("Alt-\\", "Command-\\"),
+        exec: function(editor) { editor.insert("⌽"); },
+        readOnly: true
+    }, {
+        name: "AdvancedMacroParameter",
+        bindKey: bindKey("Ctrl-'", "Command-'"),
+        exec: function(editor) { editor.insert("⍟"); },
+        readOnly: true
+    }];
+
+}
+    function inject(options, callback) {
     var baseUrl = options.baseUrl || "../build/src";
 
     var load = function(path, callback) {
@@ -89,28 +120,33 @@ function inject(options, callback) {
 
     load("ace.js", function() {
         ace.config.loadModule("ace/ext/textarea-snapper", function() {
-            var event = ace.require("ace/lib/event");
-            var areas = document.getElementsByTagName("textarea");
-            for (var i = 0; i < areas.length; i++) {
-                event.addListener(areas[i], "click", function(e) {
-                    if (e.detail == 3) {
-                        ace.transformTextarea(e.target, options.ace);
-                    }
-                });
-            }
             callback && callback();
         });
     });
 }
 
 // Call the inject function to load the ace files.
-var textAce;
+
 inject({}, function () {
     // Transform the textarea on the page into an ace editor.
     var t = document.querySelector("textarea");
-    textAce = ace.require("ace/ext/textarea-snapper").transformTextarea(t);
 
-    textAce.setOption('useSoftTabs',false)
+
+    var editor = ace.require("ace/ext/textarea-snapper").transformTextarea(t,{
+        mode: "php"
+    });
+
+    editor.commands.addCommands(getCommands());
+
+    ace.config.loadModule("ace/ext/language_tools", function() {
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true
+        });
+    });
+
+    editor.setOption('useSoftTabs', false);
+
 
 });
 
