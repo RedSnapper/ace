@@ -45,25 +45,56 @@ Macro with braces
 ⌽test(ddd,ddd⎡dd,d⎤)
 
 Macro with everything
-⌽test(dd,⎡dd,dd⎤,⌽test(ddd),(dddd),⌽)
-
-
+⌽test(dd,⎡dd,dd⎤,⌽test(ddd),(dddd),⌽test⸨ddd,ddd,ddd⸩)
 
 Macro multiline
 
 ⌽test(dd,
+    ⌽test⸨ssss⸩,
 	⎡dd,dd⎤,
 	⎡|ddd|⎤,
 	⌽test(ddd),
 	(dddd),
 ⌽)
 
+Bracket matching
 ⌽iRegex((()))
 
+Double Brackets
+----------------------
 
+Normal macro
+⌽test⸨ddd,ddd,ddd⸩
 
+No Params
+⌽test⸨⸩
 
+Comment
+⌽comment⸨dddd⸩
 
+Internal Macro
+⌽iLink⸨ddd,ddd⸩
+
+Markup macro
+⌽wLi⸨,⸩
+
+Macro With brackets
+⌽test⸨a)))),ddd,())))⸩
+
+Macro with braces
+⌽test⸨ddd,ddd⎡dd,d⎤⸩
+
+Macro with everything
+⌽test⸨dd,⎡dd,dd⎤,⌽test(ddd),(dddd),⌽⸩
+
+Macro multiline
+
+⌽test⸨dd,
+	⎡dd,dd⎤,
+	⎡|ddd|⎤,
+	⌽test(ddd),
+	(dddd),
+⌽⸩
 
 
 
