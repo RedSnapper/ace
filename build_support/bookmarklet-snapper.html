@@ -133,7 +133,8 @@ inject({}, function () {
 
 
     var editor = ace.require("ace/ext/textarea-snapper").transformTextarea(t,{
-        mode: "php"
+        mode: "php",
+        useSoftTabs: false
     });
 
     editor.commands.addCommands(getCommands());
@@ -145,7 +146,7 @@ inject({}, function () {
         });
     });
 
-    editor.setOption('useSoftTabs', false);
+    //editor.setOption('useSoftTabs', false);
 
 
 });
