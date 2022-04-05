@@ -283,6 +283,8 @@ var themes = {
     "merbivore_soft": "Merbivore Soft",
     "mono_industrial": "monoindustrial",
     "monokai": "Monokai",
+    "nord_dark": "Nord Dark",
+    "one_dark": "One Dark",
     "pastel_on_dark": "Pastels on Dark",
     "solarized_dark": "Solarized-dark",
     "solarized_light": "Solarized-light",
@@ -397,7 +399,7 @@ if (Object.keys(unsupportedScopes).length > 0) {
     console.log("I found these unsupported scopes:");
     console.log(sortedUnsupportedScopes);
     console.log("It's safe to ignore these, but they may affect your syntax highlighting if your mode depends on any of these rules.");
-    console.log("Refer to the docs on ace.ajax.org for information on how to add a scope to the CSS generator.");
+    console.log("Refer to the docs on ace.c9.io for information on how to add a scope to the CSS generator.");
 }
 
 

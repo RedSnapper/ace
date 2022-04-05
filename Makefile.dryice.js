@@ -29,6 +29,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+/*global Buffer*/
+
 var fs = require("fs");
 var path = require("path");
 var copy = require('architect-build/copy');
@@ -56,23 +58,24 @@ function main(args) {
     if (i != -1 && args[i+1])
         BUILD_DIR = args[i+1];
 
-    if (args.indexOf("--h") == -1) {
-        if (type == "minimal") {
-            buildAce({
-                compress: args.indexOf("--m") != -1,
-                noconflict: args.indexOf("--nc") != -1,
-                shrinkwrap: args.indexOf("--s") != -1
-            });
-        } else if (type == "normal") {
-            ace();
-        } else if (type == "demo") {
-            demo();
-        } else if (type == "full") {
-            ace();
-            demo();
-        } else if (type == "highlighter") {
-            // TODO
-        }
+    if (args.indexOf("--h") != -1 || args.indexOf("-h") != -1 || args.indexOf("--help") != -1) {
+        return showHelp();
+    }
+    if (type == "minimal") {
+        buildAce({
+            compress: args.indexOf("--m") != -1,
+            noconflict: args.indexOf("--nc") != -1,
+            shrinkwrap: args.indexOf("--s") != -1
+        });
+    } else if (type == "normal") {
+        ace();
+    } else if (type == "demo") {
+        demo();
+    } else if (type == "full") {
+        ace();
+        demo();
+    } else if (type == "highlighter") {
+        // TODO
     }
 }
 
@@ -105,8 +108,46 @@ function ace() {
     copy.file(ACE_HOME + "/ChangeLog.txt", BUILD_DIR + "/ChangeLog.txt");
     
     console.log('# ace ---------');
-    for (var i = 0; i < 4; i++)
+    for (var i = 0; i < 4; i++) {
         buildAce({compress: i & 2, noconflict: i & 1, check: true});
+    }
+}
+
+function buildTypes() {
+    var definitions = fs.readFileSync(ACE_HOME + '/ace.d.ts', 'utf8');
+    var paths = fs.readdirSync(BUILD_DIR + '/src-noconflict');
+    var moduleRef = '/// <reference path="./ace-modules.d.ts" />';
+
+    fs.readdirSync(BUILD_DIR + '/src-noconflict/snippets').forEach(function(path) {
+        paths.push("snippets/" + path);
+    });
+
+    var moduleNameRegex = /^(mode|theme|ext|keybinding)-|^snippets\//;
+
+    var pathModules = [
+        "declare module 'ace-builds/webpack-resolver';",
+        "declare module 'ace-builds/src-noconflict/ace';"
+    ].concat(paths.map(function(path) {
+        if (moduleNameRegex.test(path)) {
+            var moduleName = path.split('.')[0];
+            return "declare module 'ace-builds/src-noconflict/" + moduleName + "';";
+        }
+    }).filter(Boolean)).join("\n") + "\n";
+
+    fs.writeFileSync(BUILD_DIR + '/ace.d.ts', moduleRef + '\n' + definitions);
+    fs.writeFileSync(BUILD_DIR + '/ace-modules.d.ts', pathModules);
+    
+    var loader = paths.map(function(path) {
+        if (/\.js$/.test(path) && !/^ace\.js$/.test(path)) {
+            var moduleName = path.split('.')[0].replace(/-/, "/");
+            if (/^worker/.test(moduleName))
+                moduleName = "mode" + moduleName.slice(6) + "_worker";
+            moduleName = moduleName.replace(/keybinding/, "keyboard");
+            return "ace.config.setModuleUrl('ace/" + moduleName + "', require('file-loader?esModule=false!./src-noconflict/" + path + "'))";
+        }
+    }).join('\n');
+    
+    fs.writeFileSync(BUILD_DIR + '/webpack-resolver.js', loader, "utf8");
 }
 
 function demo() {
@@ -153,8 +194,8 @@ function demo() {
                 removeRequireJS = true;
                 var scripts = m.split(/,\s*/);
                 var result = [];
-                function comment(str) {result.push("<!-- " + str + " -->")}
-                function script(str) {result.push('<script src="../src/' + str + '.js"></script>')}
+                function comment(str) {result.push("<!-- " + str + " -->");}
+                function script(str) {result.push('<script src="../src/' + str + '.js"></script>');}
                 scripts.forEach(function(s) {
                     s = s.replace(/"/g, "");
                     if (s == "ace/ace") {
@@ -276,9 +317,9 @@ function buildAceModuleInternal(opts, callback) {
         if (opts.noconflict)
             filters.push(namespace(ns));
         var projectType = opts.projectType;
-        if (projectType == "main" || projectType == "ext") {
+        if (projectType !== "worker") {
             filters.push(exportAce(ns, opts.require[0],
-                opts.noconflict ? ns : "", projectType == "ext"));
+                opts.noconflict ? ns : "", projectType !== "main"));
         }
         
         filters.push(normalizeLineEndings);
@@ -299,7 +340,7 @@ function buildAceModuleInternal(opts, callback) {
         pathConfig: pathConfig,
         additional: opts.additional,
         enableBrowser: true,
-        keepDepArrays: "all",
+        keepDepArrays: opts.noconflict || opts.projectType == "worker" ? "" : "all",
         noArchitect: true,
         compress: false,
         ignore: opts.ignore || [],
@@ -347,9 +388,6 @@ function buildAce(options, callback) {
     });
     // snippets
     modeNames.forEach(function(name) {
-        if (snippetFiles.indexOf(name + ".js") == -1)
-            addSnippetFile(name);
-        
         buildSubmodule(options, {
             require: ["ace/snippets/" + name]
         }, "snippets/" + name, addCb());
@@ -362,7 +400,7 @@ function buildAce(options, callback) {
         }, "theme-" +  name, addCb());
     });
     // keybindings
-    ["vim", "emacs"].forEach(function(name) {
+    ["vim", "emacs", "sublime", "vscode"].forEach(function(name) {
         buildSubmodule(options, {
             projectType: "keybinding",
             require: ["ace/keyboard/" + name ]
@@ -388,19 +426,136 @@ function buildAce(options, callback) {
             }]
         }, "worker-" + name, addCb());
     });
+    // worker base
+    buildSubmodule(options, {
+        projectType: "worker",
+        require: ["ace/worker/mirror"],
+        ignore: [],
+        additional: [{
+            id: "ace/worker/worker",
+            transforms: [],
+            order: -1000
+        }]
+    }, "worker-base", addCb());
     // 
     function addCb() {
         addCb.count = (addCb.count || 0) + 1; 
-        return done
+        return done;
     }
     function done() {
         if (--addCb.count > 0)
             return;
         if (options.check)
             sanityCheck(options, callback);
-        if (callback) 
-            return callback();
-        console.log("Finished building " + getTargetDir(options))
+        if (options.noconflict && !options.compress)
+            buildTypes();
+
+        extractCss(options, function() {
+            if (callback) 
+                return callback();
+            console.log("Finished building " + getTargetDir(options));
+            
+        });
+    }
+}
+
+function extractCss(options, callback) {
+    var dir = BUILD_DIR + "/src" + (options.noconflict ? "-noconflict" : "");
+    var filenames = fs.readdirSync(dir);
+    var css = "";
+    var images = {};
+    var usedCss = {};
+    filenames.forEach(function(filename) {
+        var stat = fs.statSync(dir + "/" + filename);
+        if (stat.isDirectory()) return;
+        var value = fs.readFileSync(dir + "/" + filename, "utf8");
+            
+        var cssImports = detectCssImports(value);
+        
+        if (/theme-/.test(filename)) {
+            var name = filename.replace(/^theme-|\.js$/g, "");
+            var themeCss = "";
+            for (var i in cssImports) {
+                themeCss += cssImports[i];
+            }
+            themeCss = extractImages(themeCss, name, "..");
+            build.writeToFile({code: themeCss}, {
+                outputFolder: BUILD_DIR + "/css/theme",
+                outputFile: name + ".css"
+            }, function() {});
+        } else if (cssImports) {
+            css += "\n/*" + filename + "*/";
+            for (var i in cssImports) {
+                if (usedCss[cssImports[i]]) continue;
+                usedCss[cssImports[i]] = true;
+                css += "\n" + cssImports[i];
+            }
+        }
+    });
+    
+    css = extractImages(css, "main", ".").replace(/^\s*/gm, "");
+    build.writeToFile({code: css}, {
+        outputFolder: BUILD_DIR + "/css",
+        outputFile: "ace.css"
+    }, function() {
+        saveImages();
+        callback();
+    });
+    
+    function detectCssImports(code) {
+        code = code.replace(/^\s*\/\/.+|^\s*\/\*[\s\S]*?\*\//gm, "");
+
+        var stringRegex = /^("(?:[^"\\]|\\[\d\D])*"|'(?:[^'\\]|\\[\d\D])*'|)/;
+        var importCssRegex = /\.importCssString\(\s*(?:([^,)"']+)|["'])/g;
+       
+        var match;
+        var cssImports;
+        while (match = importCssRegex.exec(code)) {
+             if (match[1]) {
+                var locationRegex = new RegExp("[^.]" + match[1] + /\s*=\s*['"]/.source);
+                match = locationRegex.exec(code);
+                if (!match) continue;
+            }
+            var index = match.index + match[0].length - 1;
+            if (cssImports && cssImports[index]) continue;
+            var cssString = stringRegex.exec(code.slice(index))[0];
+            if (!cssString) continue;
+            if (!cssImports) cssImports = {};
+            cssImports[index] = cssString.slice(1, -1).replace(/\\(.|\n)/g, function(_, ch) {
+                if (ch == "n") return "";
+                return ch;
+            });
+        }
+        return cssImports;
+    }
+    
+    function extractImages(css, name, directory) {
+        var imageCounter = 0;
+        return css.replace(
+            /url\(\s*"data:([^"\\]|\\.)+"\s*\)|url\(\s*'data:([^'\\]|\\.)+'\s*\)|url\(data:[^)]+\)/g,
+            function(url) {
+                var data = url.slice(4, -1).trim();
+                if (/["']/.test(data[0])) {
+                    data = data.slice(1, -1).replace(/\\(.)/g, "$1");
+                }
+                data = data.slice(5);
+                var i = data.indexOf(",");
+                if (i == -1) {
+                    console.error(url);
+                    return url;
+                }
+                var buffer = Buffer.from(data.slice(i + 1), "base64");
+                imageCounter++;
+                var imageName = name + "-" + imageCounter + ".png";
+                images[imageName] = buffer;
+                return "url(\"" + directory + "/" + imageName + "\")";
+            }
+        );
+    }
+    function saveImages() {
+        for (var imageName in images) {
+            fs.writeFileSync(BUILD_DIR + "/css/" + imageName, images[imageName]);
+        }
     }
 }
 
@@ -416,7 +571,8 @@ function getLoadedFileList(options, callback, result) {
             if (!deps[p]) deps[p] = 1;
         });
     });
-    delete deps["ace/theme/textmate"];
+    if (options.projectType == "theme")
+        delete deps["ace/theme/textmate"];
     deps["ace/ace"] = 1;
     callback(Object.keys(deps));
 }
@@ -499,7 +655,7 @@ function namespace(ns) {
 function exportAce(ns, modules, requireBase, extModules) {
     requireBase = requireBase || "window";
     return function(text) {
-        /*globals REQUIRE_NS, MODULES, NS*/
+        /*globals REQUIRE_NS, MODULES*/
         var template = function() {
             (function() {
                 REQUIRE_NS.require(MODULES, function(a) {
@@ -511,6 +667,10 @@ function exportAce(ns, modules, requireBase, extModules) {
                         window.NS = a;
                     for (var key in a) if (a.hasOwnProperty(key))
                         window.NS[key] = a[key];
+                    window.NS["default"] = window.NS;
+                    if (typeof module == "object" && typeof exports == "object" && module) {
+                        module.exports = window.NS;
+                    }
                 });
             })();
         };
@@ -518,7 +678,11 @@ function exportAce(ns, modules, requireBase, extModules) {
         if (extModules) {
             template = function() {
                 (function() {
-                    REQUIRE_NS.require(MODULES, function() {});
+                    REQUIRE_NS.require(MODULES, function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             };
         }
@@ -559,23 +723,24 @@ function generateThemesModule(themes) {
     fs.writeFileSync(__dirname + '/lib/ace/ext/themelist_utils/themes.js', themelist, 'utf8');
 }
 
-function addSnippetFile(modeName) {
-    var snippetFilePath = ACE_HOME + "/lib/ace/snippets/" + modeName;
-    if (!fs.existsSync(snippetFilePath + ".js")) {
-        copy.file(ACE_HOME + "/tool/templates/snippets.js", snippetFilePath + ".js", function(t) {
-            return t.replace(/%modeName%/g, modeName);
+function compress(text) {
+    var uglify = require("dryice").copy.filter.uglifyjs;
+    uglify.options.mangle_toplevel = {except: ["ACE_NAMESPACE", "requirejs"]};
+    uglify.options.beautify = {ascii_only: true, inline_script: true};
+    return asciify(uglify(text));
+    // copy.filter.uglifyjs.options.ascii_only = true; doesn't work with some uglify.js versions
+    function asciify(text) {
+        return text.replace(/[\x00-\x08\x0b\x0c\x0e\x19\x80-\uffff]/g, function(c) {
+            c = c.charCodeAt(0).toString(16);
+            if (c.length == 1)
+                return "\\x0" + c;
+            if (c.length == 2)
+                return "\\x" + c;
+            if (c.length == 3)
+                return "\\u0" + c;
+            return "\\u" + c;
         });
     }
-    if (!fs.existsSync(snippetFilePath + ".snippets")) {
-        fs.writeFileSync(snippetFilePath + ".snippets", "");
-    }
-}
-
-function compress(text) {
-    var ujs = require("dryice").copy.filter.uglifyjs;
-    ujs.options.mangle_toplevel = {except: ["ACE_NAMESPACE", "requirejs"]};
-    ujs.options.beautify = {ascii_only: true, inline_script: true}
-    return ujs(text);
 }
 
 function extend(base, extra) {

@@ -18,7 +18,7 @@ $(function() {
         });
         
         ace.config.loadModule("ace/ext/emmet", function() {
-            ace.require("ace/lib/net").loadScript("http://cloud9ide.github.io/emmet-core/emmet.js", function() {
+            ace.require("ace/lib/net").loadScript("https://cloud9ide.github.io/emmet-core/emmet.js", function() {
                 embedded_editor.setOption("enableEmmet", true);
                 editor.setOption("enableEmmet", true);
             });
@@ -50,7 +50,7 @@ $(function() {
         }
     });
     
-    $("ul.menu-list li").click("click auxclick", function(e) {
+    $("ul.menu-list li").on("click auxclick", function(e) {
         if (e.target.tagName !== "A") {
             var href = $(this).find("a").attr("href");
             if (e.originalEvent.button == 1)
@@ -100,7 +100,7 @@ $(function() {
     tabs.find(tab_a_selector).click(function(e) {
         e.preventDefault();
         if ($(this).attr("href") === "/") {
-            window.location = "http://ace.ajax.org";
+            window.location = "https://ace.c9.io";
             return;
         }
         if ($(this).attr("href").indexOf("#api") === 0) {
@@ -133,7 +133,13 @@ $(function() {
                 }, 400);
             }
         }
-
+        
+        $($(this).attr("href") + " img[lazy-src]").each(function() {
+              var val = $.attr(this, "lazy-src");
+              $.attr(this, "src", val);
+              $.removeAttr(this, "lazy-src");
+        });
+        
         $(this).tab("show");
 
         var state = {};
