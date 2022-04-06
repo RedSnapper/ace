@@ -4,3 +4,6 @@
 [submodule "build"]
 	path = build
 	url = https://github.com/ajaxorg/ace-builds.git
+[submodule "snapper-build"]
+	path = snapper-build
+	url = https://github.com/RedSnapper/ace-builds.git
